@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<style type="text/css">
+    h3{
+        text-align: center;
+    }
+    #search{
+        width: 100%;
+    }
+</style>
+<body>
+<div id="app">
+
+    <el-container>
+        <el-header>
+            <h3>移动化适配客户情况统计</h3>
+        </el-header>
+        <el-main>
+            <el-row>
+                <el-col :span="21" >
+                    <el-input
+                            placeholder="请输入公司名称查找"
+                            prefix-icon="el-icon-search"
+                            v-model="keywords">
+                    </el-input>
+                </el-col>
+                <el-col :span="3">
+                    <el-button @click="searchData" type="primary"  id="search">搜索</el-button>
+                </el-col>
+            </el-row>
+            <el-row>
+                <template>
+                    <el-table
+                            :data="tableData"
+                            height="700"
+                            border
+                            style="width: 100%">
+                        <el-table-column
+                                prop="name"
+                                label="公司名称"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="web"
+                                label="公司网址"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="pv"
+                                label="访问量">
+                        </el-table-column>
+                        <el-table-column
+                                prop="status"
+                                label="网址状态">
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-row>
+        </el-main>
+        <el-pagination
+                background
+                :current-page="pageIndex"
+                layout="prev, pager, next"
+                :page-size="pageSize"
+                :total="total">
+        </el-pagination>
+    </el-container>
+
+
+
+
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                pageIndex:2,
+                keywords:'',
+                total:25,
+                visible: false,
+                pageSize:20,
+                tableData: [] }
+        },
+        mounted: function(){
+            this.searchData()
+        },
+        methods:{
+            searchData(){
+                var that=this;
+
+                $.post("api/list",{keywords:that.keywords},function(res){
+                    console.log(res)
+                    that.tableData=res.content;
+                    that.total=res.total;
+                    that.pageIndex=res.pageable.pageNumber
+                })
+
+            }
+
+        }
+
+
+    })
+</script>
+</html>
