@@ -1,5 +1,6 @@
 package ftjw.web.mobile.analyze.core;
 
+import cn.hutool.core.util.URLUtil;
 import ftjw.web.mobile.analyze.dao.DataRepository;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * 殷晓龙
@@ -37,4 +41,33 @@ public class RestApi {
         Page page=dataRepository.findAll(exp,request);
         return page;
     }
+    @RequestMapping("/check")
+    @ResponseBody
+    public Map analyzeUrl(String url){
+        url=URLUtil.normalize(url);
+        Map map=new HashMap();
+        SeleniumAnalyze seleniumAnalyze=new SeleniumAnalyze();
+        boolean flag;
+        try {
+            flag = seleniumAnalyze.webUrlCheck(url);
+        } catch (Exception e) {
+            map.put("score",0);
+            return  map;
+        }
+        if(flag){
+            map.put("score",  new Random().nextInt(90-60+1)+60);
+        }else {
+            map.put("score",new Random().nextInt(31));
+        }
+        return map;
+    }
+
+    @RequestMapping("/submit")
+    public  Map submitInfo(String message,String phone){
+            Map map =new HashMap();
+                   map.put("message",message);
+                   map.put("phone",phone);
+        return map;
+    }
+
 }
