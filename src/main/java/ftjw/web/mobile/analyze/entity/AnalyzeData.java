@@ -1,4 +1,4 @@
-package ftjw.web.mobile.analyze.core;
+package ftjw.web.mobile.analyze.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

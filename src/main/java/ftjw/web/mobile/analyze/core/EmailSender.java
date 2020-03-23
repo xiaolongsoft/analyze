@@ -20,13 +20,12 @@ public class EmailSender {
     private  String from;
     @Autowired
     JavaMailSender sender;
-    public void  sendEmail(List<String> emails){
+    public void  sendEmail(List<String> emails,String title,String content){
         SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
         simpleMailMessage.setFrom(from);
         simpleMailMessage.setTo( emails.stream().collect(Collectors.joining(",")));
-        simpleMailMessage.setSubject("统计周报");
-        simpleMailMessage.setText("春花秋月何时了，往事知多少");
-
+        simpleMailMessage.setSubject(title);
+        simpleMailMessage.setText(content);
         sender.send(simpleMailMessage);
 
     }

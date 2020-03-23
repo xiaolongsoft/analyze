@@ -2,6 +2,9 @@ package ftjw.web.mobile.analyze.core;
 
 import cn.hutool.core.util.URLUtil;
 import ftjw.web.mobile.analyze.dao.DataRepository;
+import ftjw.web.mobile.analyze.dao.SubmitRepository;
+import ftjw.web.mobile.analyze.entity.AnalyzeData;
+import ftjw.web.mobile.analyze.entity.AnalyzeSubmit;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +26,8 @@ public class RestApi {
 
     @Resource
     private DataRepository dataRepository;
+    @Resource
+    private SubmitRepository submitRepository;
 
     @RequestMapping("")
     public String test(){
@@ -62,12 +67,19 @@ public class RestApi {
         return map;
     }
 
+    /**
+     * 客户提交信息
+     * @param message
+     * @param phone
+     * @return
+     */
     @RequestMapping("/submit")
-    public  Map submitInfo(String message,String phone){
-            Map map =new HashMap();
-                   map.put("message",message);
-                   map.put("phone",phone);
-        return map;
+    public  AnalyzeSubmit submitInfo(String message,String phone){
+        AnalyzeSubmit submit=new AnalyzeSubmit();
+        submit.setMessage(message);
+        submit.setPhone(phone);
+        submitRepository.save(submit);
+        return submit;
     }
 
 }

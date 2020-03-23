@@ -13,31 +13,32 @@ pagehelper:
 spring:
     thymeleaf:
         cache=false
-#    datasource:
-#        #url:    jdbc:mysql://10.66.146.110:3306/hlzw?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
-#        url:    jdbc:mysql://182.254.135.162:11196/hlzw?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
-#        username:   hlzw
-#        password:   hlzw!@#123
-#        driver-class-name: com.mysql.cj.jdbc.Driver
+    datasource:
+        #url:    jdbc:mysql://10.66.146.110:3306/hlzw?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+        url:    jdbc:mysql://182.254.135.162:11196/hlzw?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+        username:   hlzw
+        password:   hlzw!@#123
+        driver-class-name: com.mysql.cj.jdbc.Driver
     jpa:
         show-sql: true
         hibernate:
             ddl-auto: update
-        database-platform: org.hibernate.dialect.H2Dialect
-    datasource:
-        url: jdbc:h2:mem:dbtest
-        username: hlzw
-        password: hlzw
-        driver-class-name: org.h2.Driver
-        schema: classpath:db/schema.sql
-        data: classpath:db/data.sql
-        platform: h2
-    h2:
-        console:
-            settings:
-                web-allow-others: true
-            path: /h2
-            enabled: true
+#        database-platform: org.hibernate.dialect.H2Dialect
+#
+#    datasource:
+#        url: jdbc:h2:mem:dbtest
+#        username: hlzw
+#        password: hlzw
+#        driver-class-name: org.h2.Driver
+#        schema: classpath:db/schema.sql
+#        data: classpath:db/data.sql
+#        platform: h2
+#    h2:
+#        console:
+#            settings:
+#                web-allow-others: true
+#            path: /h2
+#            enabled: true
     servlet:
         multipart:
             max-file-size: 10MB
