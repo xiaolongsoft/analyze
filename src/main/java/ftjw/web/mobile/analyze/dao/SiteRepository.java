@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface SiteRepository extends JpaRepository<Site,Integer> {
 
-    @Query(value = "SELECT `option`,id ,uid FROM `t_site` WHERE sitetype=5 AND `option` LIKE '%pub_time%'",nativeQuery = true)
+    @Query(value = "SELECT `option`,id ,uid,name FROM `t_site` WHERE sitetype=5 AND `option` LIKE '%pub_time%'",nativeQuery = true)
     List<Site> findSites();
 }

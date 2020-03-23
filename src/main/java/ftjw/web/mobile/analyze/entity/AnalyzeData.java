@@ -36,4 +36,13 @@ public class AnalyzeData {
      * 网址状态
      */
     String status;
+
+    /**
+     * 发布时间
+     */
+    Integer firstPubTime;
+    /**
+     * 过期时间
+     */
+    Integer expireTime;
 }

@@ -18,4 +18,5 @@ public class Site {
     Integer id;
     Integer uid;
     String option;
+    String name;
 }
