@@ -64,6 +64,7 @@
         </el-main>
         <el-pagination
                 background
+                @current-change="searchData"
                 :current-page="pageIndex"
                 layout="prev, pager, next"
                 :page-size="pageSize"
@@ -85,32 +86,27 @@
         el: '#app',
         data: function() {
             return {
-                pageIndex:2,
+                pageIndex:1,
                 keywords:'',
                 total:25,
                 visible: false,
                 pageSize:20,
+                total:0,
                 tableData: [] }
         },
         mounted: function(){
-            this.searchData()
+            this.searchData(1)
         },
         methods:{
-            searchData(){
+            searchData:function(currentPage){
                 var that=this;
-
-                $.post("api/list",{keywords:that.keywords},function(res){
+                $.post("/api/list",{keywords:that.keywords,pageIndex:currentPage},function(res){
                     console.log(res)
                     that.tableData=res.content;
-                    that.total=res.total;
-                    that.pageIndex=res.pageable.pageNumber
+                    that.total=res.totalElements;
                 })
-
             }
-
         }
-
-
     })
 </script>
 </html>

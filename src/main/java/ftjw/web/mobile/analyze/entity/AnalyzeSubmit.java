@@ -2,9 +2,7 @@ package ftjw.web.mobile.analyze.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 殷晓龙
@@ -16,6 +14,7 @@ import javax.persistence.Table;
 public class AnalyzeSubmit {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     /**
      * 客户留言
@@ -25,4 +24,5 @@ public class AnalyzeSubmit {
      * 电话
      */
     String phone;
+    Integer sid;
 }

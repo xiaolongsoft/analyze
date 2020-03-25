@@ -1,15 +1,18 @@
 package ftjw.web.mobile.analyze.core;
 
 import cn.hutool.core.util.URLUtil;
+import cn.hutool.http.HttpUtil;
 import ftjw.web.mobile.analyze.dao.DataRepository;
 import ftjw.web.mobile.analyze.dao.SubmitRepository;
 import ftjw.web.mobile.analyze.entity.AnalyzeData;
 import ftjw.web.mobile.analyze.entity.AnalyzeSubmit;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -22,6 +25,7 @@ import java.util.Random;
  */
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class RestApi {
 
     @Resource
@@ -74,11 +78,21 @@ public class RestApi {
      * @return
      */
     @RequestMapping("/submit")
-    public  AnalyzeSubmit submitInfo(String message,String phone){
+    public  AnalyzeSubmit submitInfo(@RequestParam(name = "message",defaultValue = "无")String message, @RequestParam(name = "phone")String phone, @RequestParam(name = "saleid",defaultValue = "0") Integer id){
         AnalyzeSubmit submit=new AnalyzeSubmit();
         submit.setMessage(message);
         submit.setPhone(phone);
+        submit.setSid(id);
         submitRepository.save(submit);
+        if(StringUtils.length(phone)<11){
+            return null;
+        }
+        Map parms=new HashMap();
+        parms.put("custname",message);
+        parms.put("tel",phone);
+        parms.put("userid",id);
+        String res = HttpUtil.get("http://111.198.66.100:7180/xiansuo/leads", parms);
+        log.info("新用户提交记录",res);
         return submit;
     }
 

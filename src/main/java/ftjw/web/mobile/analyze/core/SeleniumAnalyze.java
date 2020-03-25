@@ -26,8 +26,8 @@ public class SeleniumAnalyze {
     ChromeDriver webDriver;
 
 
-   static String chromeDriverPath= "E:/python_home/venv/Scripts/chromedriver.exe";
-  // static String chromeDriverPath= "/usr/bin/chromedriver";
+    //static String chromeDriverPath= "E:/python_home/venv/Scripts/chromedriver.exe";
+    static String chromeDriverPath= "/usr/bin/chromedriver";
     /**
      * 初始化webdriver
      * @return
@@ -63,8 +63,6 @@ public class SeleniumAnalyze {
 
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.get(url);
-        webDriver.getErrorHandler();
-
         webDriver.executeScript("return document.documentElement.outerHTML");
         List ele= webDriver.findElementsByXPath("//meta[@name='viewport']");
         if(ele.size()>0){

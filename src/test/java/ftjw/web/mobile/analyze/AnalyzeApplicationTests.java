@@ -4,6 +4,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import ftjw.web.mobile.analyze.core.IBossUtill;
+import ftjw.web.mobile.analyze.core.SeleniumAnalyze;
 import ftjw.web.mobile.analyze.dao.DataRepository;
 import ftjw.web.mobile.analyze.dao.SiteRepository;
 import ftjw.web.mobile.analyze.entity.AnalyzeData;
@@ -29,13 +30,16 @@ class AnalyzeApplicationTests {
     @Test
     public void findSiteList(){
        List<Site> list = siteRepository.findSites();
+        SeleniumAnalyze seleniumAnalyze=new SeleniumAnalyze();
        for (Site site:list){
            Long current=System.currentTimeMillis();
            JSONObject obj = JSONUtil.parseObj(site.getOption());
-
-           String web=obj.getStr("ORIGIN_HOST_PROTOCOL")+"://"+obj.getStr("ORIGIN_HOST");
+           String protocol=obj.getStr("ORIGIN_HOST_PROTOCOL");
+           if(protocol==null){
+               protocol="http";
+           }
+           String web=protocol.replace(":","")+"://"+obj.getStr("ORIGIN_HOST");
            obj.getInt("expire_time");
-
            String res;
            if(site.getUid()==14){
                res =  IBossUtill.query_a2sc(site.getId());
@@ -45,21 +49,34 @@ class AnalyzeApplicationTests {
            JSONObject jsonObject = JSONUtil.parseObj(res);
            JSONArray array = jsonObject.getJSONArray("obj");
            Count c = array.get(0, Count.class);
-           System.out.println(res);
            AnalyzeData ad=new AnalyzeData();
            ad.setName(site.getName());
            ad.setId(site.getId());
            ad.setPv(c.getTotal());
            if(current>Long.valueOf(obj.getInt("expire_time",0)+"000")){
                ad.setStatus("过期");
+
            }else{
-               ad.setStatus("正常");
+
+               try {
+                    if(seleniumAnalyze.webUrlCheck(web)){
+                        ad.setStatus("正常");
+                    }else {
+                        ad.setStatus("失效");
+                    }
+               } catch (Exception e) {
+                   System.out.println(e.getMessage());
+                   ad.setStatus("无法访问");
+                   System.out.println("无法访问");
+               }finally {
+                   seleniumAnalyze.quite();
+               }
+
            }
            ad.setWeb(web);
            ad.setExpireTime(obj.getInt("expire_time",0));
            ad.setFirstPubTime(obj.getInt("first_pub_time",0));
            dataRepository.save(ad);
-
        }
 
 
