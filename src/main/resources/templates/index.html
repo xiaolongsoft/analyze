@@ -100,7 +100,7 @@
         methods:{
             searchData:function(currentPage){
                 var that=this;
-                $.post("/api/list",{keywords:that.keywords,pageIndex:currentPage},function(res){
+                $.get("/api/list",{keywords:that.keywords,pageIndex:currentPage},function(res){
                     console.log(res)
                     that.tableData=res.content;
                     that.total=res.totalElements;

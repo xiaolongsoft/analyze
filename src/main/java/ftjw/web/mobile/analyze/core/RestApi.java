@@ -79,14 +79,15 @@ public class RestApi {
      */
     @RequestMapping("/submit")
     public  AnalyzeSubmit submitInfo(@RequestParam(name = "message",defaultValue = "无")String message, @RequestParam(name = "phone")String phone, @RequestParam(name = "saleid",defaultValue = "0") Integer id){
+
+        if(StringUtils.length(phone)<11){
+            return null;
+        }
         AnalyzeSubmit submit=new AnalyzeSubmit();
         submit.setMessage(message);
         submit.setPhone(phone);
         submit.setSid(id);
         submitRepository.save(submit);
-        if(StringUtils.length(phone)<11){
-            return null;
-        }
         Map parms=new HashMap();
         parms.put("custname",message);
         parms.put("tel",phone);

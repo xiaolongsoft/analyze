@@ -31,6 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .successHandler(new SimpleUrlAuthenticationSuccessHandler("/admin"))
                 .and()
                 .httpBasic();
+       // http.csrf().disable(); 开启csrf会组织post请求
     }
     @Autowired
     AgentUserDetailService userDetailService;

@@ -27,7 +27,7 @@ class User{
     @RequestMapping("")
     @ResponseBody
     public String go(){
-        return "user go";
+        return "user go 龙";
     }
 
     @RequestMapping("/info")
@@ -42,5 +42,15 @@ class User{
         }
         return " some product info,currentUser is: "+currentUser;
     }
+}
 
+
+@Controller
+@RequestMapping("/err")
+ class ErrPage {
+    @RequestMapping("")
+    @ResponseBody
+    public String err(){
+        return "应该是出了啥问题";
+    }
 }
