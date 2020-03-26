@@ -83,6 +83,11 @@ public class IBossUtill {
         String url =QUERY_URL.replace("awsc","a2sc")
                 .replace("APPID",appid14)
                 .replace("ACCESS_TOKEN",getAccessToken14(param));
-        return HttpUtil.get(url,param);
+        try {
+            return  HttpUtil.get(url,param);
+        } catch (Exception e) {
+            return "err";
+        }
+
     }
 }

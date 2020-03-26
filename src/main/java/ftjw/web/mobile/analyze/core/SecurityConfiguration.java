@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 /**
@@ -28,10 +29,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .hasRole("ADMIN")
                 .and()
                 .formLogin()
-                .successHandler(new SimpleUrlAuthenticationSuccessHandler("/admin"))
+                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
+                .successHandler(new SimpleUrlAuthenticationSuccessHandler("http://192.168.18.105:8080/dashboard"))
                 .and()
                 .httpBasic();
-       // http.csrf().disable(); 开启csrf会组织post请求
+        http.csrf().disable();
     }
     @Autowired
     AgentUserDetailService userDetailService;
@@ -50,6 +52,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .withUser("user").password("{noop}user") // 普通用户，只能访问 /product/**
                 .roles("USER");*/
     }
+
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

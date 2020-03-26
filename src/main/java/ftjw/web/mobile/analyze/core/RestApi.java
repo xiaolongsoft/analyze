@@ -37,6 +37,10 @@ public class RestApi {
     public String test(){
         return "ok";
     }
+    @RequestMapping("/p")
+    public String testPost(String name,Integer id){
+        return "name:"+name+" ,id:"+id;
+    }
 
     @RequestMapping("/list")
     @ResponseBody

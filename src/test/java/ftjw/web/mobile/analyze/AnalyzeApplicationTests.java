@@ -10,6 +10,8 @@ import ftjw.web.mobile.analyze.dao.SiteRepository;
 import ftjw.web.mobile.analyze.entity.AnalyzeData;
 import ftjw.web.mobile.analyze.entity.Count;
 import ftjw.web.mobile.analyze.entity.Site;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,11 +28,18 @@ class AnalyzeApplicationTests {
     SiteRepository siteRepository;
     @Resource
     DataRepository dataRepository;
+    SeleniumAnalyze seleniumAnalyze;
+
+    @BeforeEach
+    public void init(){
+        System.out.println("初始化");
+        this.seleniumAnalyze =new SeleniumAnalyze();
+    }
 
     @Test
     public void findSiteList(){
        List<Site> list = siteRepository.findSites();
-        SeleniumAnalyze seleniumAnalyze=new SeleniumAnalyze();
+
        for (Site site:list){
            Long current=System.currentTimeMillis();
            JSONObject obj = JSONUtil.parseObj(site.getOption());
@@ -45,6 +54,9 @@ class AnalyzeApplicationTests {
                res =  IBossUtill.query_a2sc(site.getId());
            }else {
                res =  IBossUtill.query_awsc(site.getId());
+           }
+           if("err".equals(res)){
+               continue;
            }
            JSONObject jsonObject = JSONUtil.parseObj(res);
            JSONArray array = jsonObject.getJSONArray("obj");
@@ -64,12 +76,9 @@ class AnalyzeApplicationTests {
                     }else {
                         ad.setStatus("失效");
                     }
-               } catch (Exception e) {
-                   System.out.println(e.getMessage());
-                   ad.setStatus("无法访问");
-                   System.out.println("无法访问");
-               }finally {
-                   seleniumAnalyze.quite();
+               }catch (Exception e) {
+                   ad.setStatus(e.getCause().getMessage());
+                   System.out.println("出了啥问题了");
                }
 
            }
@@ -79,8 +88,12 @@ class AnalyzeApplicationTests {
            dataRepository.save(ad);
        }
 
+    }
 
-
+    @AfterEach
+    public void exit(){
+        System.out.println("结束");
+        seleniumAnalyze.quite();
     }
 
 }

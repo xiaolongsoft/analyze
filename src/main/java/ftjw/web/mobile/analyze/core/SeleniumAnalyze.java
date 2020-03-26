@@ -58,6 +58,7 @@ public class SeleniumAnalyze {
         HttpRequest httpRequest = HttpUtil.createGet(url);
         HttpResponse response = httpRequest.execute();
         if(response.getStatus()>310){
+            System.out.println("无法访问");
             throw new Exception("无法访问");
         }
 
@@ -81,5 +82,6 @@ public class SeleniumAnalyze {
 
     public void quite(){
         webDriver.quit();
+        System.out.println("真的退出了");
     }
 }

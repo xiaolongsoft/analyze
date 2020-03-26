@@ -1,5 +1,6 @@
 package ftjw.web.mobile.analyze.core;
 
+import lombok.Data;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/admin")
+@Data
 public class SecurityApi {
     @RequestMapping("")
     @ResponseBody
     public String go(){
+
         return "admin ok";
+    }
+
+
+
+    @RequestMapping("/a")
+    @ResponseBody
+    public String a(){
+        return "admin a";
+    }
+
+    @RequestMapping("/b")
+    @ResponseBody
+    public String b(String name){
+        return "admin b namae:"+name;
     }
 }
 
