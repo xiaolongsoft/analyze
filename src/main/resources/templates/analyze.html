@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<style type="text/css">
+    h3{
+        text-align: center;
+    }
+    #search{
+        width: 100%;
+    }
+</style>
+<body>
+<div id="app">
+
+    <el-container>
+        <el-header>
+            <el-header>
+                <el-row>
+                    <el-col  :offset="20" :span=3><span th:text="#{username}"></span></el-col>
+                    <el-col :span=3 :offset="22">
+                        <el-button @onclick="logout" type="danger"  id="exit">退出</el-button>
+                    </el-col>
+
+                </el-row>
+                <el-row>
+                    <h3>移动化适配客户情况统计</h3>
+                </el-row>
+            </el-header>
+        </el-header>
+        <el-main>
+
+            <el-row>
+                <template>
+                    <el-table
+                            :data="tableData"
+                            stripe
+                            @row-click="jump"
+                            style="width: 100%">
+                        <el-table-column
+                                prop="label"
+                                label="状态"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="total"
+                                label="总计">
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-row>
+        </el-main>
+
+    </el-container>
+
+
+
+
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                tableData: [],
+
+                options: [{
+                    value: '1',
+                    label: '正常'
+                }, {
+                    value: '-1',
+                    label: '过期'
+                }, {
+                    value: '2',
+                    label: '失效'
+                }, {
+                    value: '3',
+                    label: '访问异常'
+                }],
+
+            }
+        },
+        mounted: function(){
+            this.searchData()
+        },
+        methods:{
+            searchData:function(){
+                var that=this;
+                $.get("/api/analyzeCount",{},function(list){
+                    console.log(list)
+
+                     for (i=0;i<list.length;i++){
+                        if(list[i].status==1){
+                            list[i].label="正常"
+                        }else if(list[i].status==0){
+                            list[i].label="过期"
+                        }else if (list[i].status ==2){
+                            list[i].label="失效"
+                        }else{
+                            list[i].label="访问异常"
+                        }
+                    }
+                    that.tableData=list;
+                })
+            },
+            logout:function () {
+                window.location.href="/logout";
+            },
+            jump:function(row){
+                console.log(row);
+                window.location.href="/web/list?status="+row.status;
+            }
+        }
+    })
+</script>
+</html>

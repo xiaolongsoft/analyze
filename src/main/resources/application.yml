@@ -52,6 +52,9 @@ spring:
         username: phoenixoop@163.com
         password: Dahuzi520
         default-encoding: UTF-8
-
+    data:
+        redis:
+            repositories:
+                enabled: false
 server:
     port: 9090

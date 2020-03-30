@@ -23,14 +23,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .mvcMatchers("/user/**")
+                .mvcMatchers("/web/index","/user/**")
                 .hasRole("USER")
                 .mvcMatchers("/admin/**")
                 .hasRole("ADMIN")
                 .and()
                 .formLogin()
-                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
-                .successHandler(new SimpleUrlAuthenticationSuccessHandler("http://192.168.18.105:8080/dashboard"))
+                .successHandler(new SimpleUrlAuthenticationSuccessHandler("/web/index"))
                 .and()
                 .httpBasic();
         http.csrf().disable();

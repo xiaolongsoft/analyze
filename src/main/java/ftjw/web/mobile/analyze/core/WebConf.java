@@ -36,13 +36,10 @@ public class WebConf extends WebMvcConfigurationSupport {
             super.addResourceHandlers(registry);
     }
 
-/*    *//**
-     * 解决response返回中文出现乱码问题
-     * @param converters
-     *//*
+
     @Override
-    protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
         super.configureMessageConverters(converters);
-    }*/
+    }
 }

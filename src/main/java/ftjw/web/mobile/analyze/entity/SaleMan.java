@@ -19,4 +19,5 @@ public class SaleMan {
     Integer id;
     String phone;
     String name;
+    String email;
 }

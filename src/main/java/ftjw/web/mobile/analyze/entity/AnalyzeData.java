@@ -35,7 +35,7 @@ public class AnalyzeData {
     /**
      * 网址状态
      */
-    String status;
+    Integer status;
 
     /**
      * 发布时间

@@ -16,6 +16,7 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -44,16 +45,28 @@ public class RestApi {
 
     @RequestMapping("/list")
     @ResponseBody
-    public Page list(@RequestParam(required = false) String keywords, @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
+    public Page list(@RequestParam(required = false) String keywords,@RequestParam(required = false) Integer status, @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
         PageRequest request= PageRequest.of(pageIndex,pageSize, Sort.by("id"));
         AnalyzeData analyzeData=new AnalyzeData();
         analyzeData.setName(keywords);
+        analyzeData.setStatus(status);
         ExampleMatcher matcher=ExampleMatcher.matching()
-                .withMatcher("name",ExampleMatcher.GenericPropertyMatchers.contains());
+                .withMatcher("name",ExampleMatcher.GenericPropertyMatchers.contains())
+                ;
         Example exp=Example.of(analyzeData,matcher);
         Page page=dataRepository.findAll(exp,request);
         return page;
     }
+    @RequestMapping("/analyzeCount")
+    @ResponseBody
+    public List<Map<String,Object>> analyzeData(){
+        List<Map<String, Object>> maps = dataRepository.countAnalyzeDataByStatus();
+       return maps;
+    }
+
+
+
+
     @RequestMapping("/check")
     @ResponseBody
     public Map analyzeUrl(String url){

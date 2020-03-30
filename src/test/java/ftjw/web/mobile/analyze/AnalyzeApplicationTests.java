@@ -1,5 +1,6 @@
 package ftjw.web.mobile.analyze;
 
+import cn.hutool.http.HttpException;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -33,7 +34,6 @@ class AnalyzeApplicationTests {
     @BeforeEach
     public void init(){
         System.out.println("初始化");
-        this.seleniumAnalyze =new SeleniumAnalyze();
     }
 
     @Test
@@ -41,6 +41,8 @@ class AnalyzeApplicationTests {
        List<Site> list = siteRepository.findSites();
 
        for (Site site:list){
+
+           System.out.println(site.getId()+site.getName());
            Long current=System.currentTimeMillis();
            JSONObject obj = JSONUtil.parseObj(site.getOption());
            String protocol=obj.getStr("ORIGIN_HOST_PROTOCOL");
@@ -66,26 +68,31 @@ class AnalyzeApplicationTests {
            ad.setId(site.getId());
            ad.setPv(c.getTotal());
            if(current>Long.valueOf(obj.getInt("expire_time",0)+"000")){
-               ad.setStatus("过期");
+               ad.setStatus(0);
 
            }else{
-
+               this.seleniumAnalyze =new SeleniumAnalyze();
                try {
                     if(seleniumAnalyze.webUrlCheck(web)){
-                        ad.setStatus("正常");
+                        ad.setStatus(1);
                     }else {
-                        ad.setStatus("失效");
+                        ad.setStatus(2);
                     }
                }catch (Exception e) {
-                   ad.setStatus(e.getCause().getMessage());
-                   System.out.println("出了啥问题了");
-               }
+                   if (e instanceof HttpException){
+                       ad.setStatus(3);
+                   }else {
+                       ad.setStatus(3);
+                   }
 
+               }
+               seleniumAnalyze.quite();
            }
            ad.setWeb(web);
            ad.setExpireTime(obj.getInt("expire_time",0));
            ad.setFirstPubTime(obj.getInt("first_pub_time",0));
            dataRepository.save(ad);
+
        }
 
     }
@@ -93,7 +100,6 @@ class AnalyzeApplicationTests {
     @AfterEach
     public void exit(){
         System.out.println("结束");
-        seleniumAnalyze.quite();
     }
 
 }

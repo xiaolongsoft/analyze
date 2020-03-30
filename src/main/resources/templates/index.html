@@ -12,25 +12,45 @@
     #search{
         width: 100%;
     }
+    .el-header{
+        height: auto!important;
+    }
 </style>
 <body>
 <div id="app">
 
     <el-container>
-        <el-header>
-            <h3>移动化适配客户情况统计</h3>
-        </el-header>
+            <el-header>
+                <el-row>
+                    <el-col :span=2 :offset="22">
+                        <el-button @onclick="logout" type="danger"  id="exit">退出</el-button>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <h3>移动化适配客户情况统计</h3>
+                </el-row>
+            </el-header>
         <el-main>
             <el-row>
-                <el-col :span="21" >
+                <el-col :span="15" >
                     <el-input
                             placeholder="请输入公司名称查找"
                             prefix-icon="el-icon-search"
                             v-model="keywords">
                     </el-input>
                 </el-col>
+                <el-col :span="6">
+                    <el-select v-model="status" clearable placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
                 <el-col :span="3">
-                    <el-button @click="searchData" type="primary"  id="search">搜索</el-button>
+                    <el-button @click="searchData(1)" type="primary"  id="search">搜索</el-button>
                 </el-col>
             </el-row>
             <el-row>
@@ -38,6 +58,7 @@
                     <el-table
                             :data="tableData"
                             height="700"
+                            @row-click="jump"
                             border
                             style="width: 100%">
                         <el-table-column
@@ -66,7 +87,7 @@
                 background
                 @current-change="searchData"
                 :current-page="pageIndex"
-                layout="prev, pager, next"
+                layout="prev, pager, next,total"
                 :page-size="pageSize"
                 :total="total">
         </el-pagination>
@@ -92,7 +113,23 @@
                 visible: false,
                 pageSize:20,
                 total:0,
-                tableData: [] }
+                tableData: [],
+                status: '',
+                options: [{
+                    value: '1',
+                    label: '正常'
+                }, {
+                    value: '0',
+                    label: '过期'
+                }, {
+                    value: '2',
+                    label: '失效'
+                }, {
+                    value: '3',
+                    label: '访问异常'
+                }],
+
+            }
         },
         mounted: function(){
             this.searchData(1)
@@ -100,11 +137,30 @@
         methods:{
             searchData:function(currentPage){
                 var that=this;
-                $.get("/api/list",{keywords:that.keywords,pageIndex:currentPage},function(res){
+                $.get("/api/list",{keywords:that.keywords,pageIndex:currentPage,status:that.status},function(res){
                     console.log(res)
-                    that.tableData=res.content;
+                    var list=res.content;
+                     for (i=0;i<res.content.length;i++){
+                        if(list[i].status==1){
+                            list[i].status="正常"
+                        }else if(list[i].status==0){
+                            list[i].status="过期"
+                        }else if (list[i].status ==2){
+                            list[i].status="失效"
+                        }else{
+                            list[i].status="访问异常"
+                        }
+                    }
+                    that.tableData=list;
                     that.total=res.totalElements;
                 })
+            },
+            logout:function () {
+                window.location.href="/logout";
+            },
+            jump:function (row) {
+                console.log(row);
+                window.location.href=row.web;
             }
         }
     })
