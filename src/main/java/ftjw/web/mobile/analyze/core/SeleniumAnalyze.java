@@ -26,8 +26,8 @@ public class SeleniumAnalyze {
     ChromeDriver webDriver;
 
 
-    static String chromeDriverPath= "E:/python_home/venv/Scripts/chromedriver.exe";
-    //static String chromeDriverPath= "/usr/bin/chromedriver";
+    //static String chromeDriverPath= "E:/python_home/venv/Scripts/chromedriver.exe";
+    static String chromeDriverPath= "/usr/bin/chromedriver";
     /**
      * 初始化webdriver
      * @return

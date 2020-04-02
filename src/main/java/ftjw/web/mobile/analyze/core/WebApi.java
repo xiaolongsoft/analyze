@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,18 +37,32 @@ public class WebApi {
         return "index";
     }
 
+    @RequestMapping("/login")
+    public String logiin(){
+
+        return "index";
+    }
+
     @RequestMapping("/analyze")
     public String analyze(){
         return "analyze";
     }
 
+    @RequestMapping("/submit")
+    public String submit(){
+        return "submit";
+    }
+
 
 
     @RequestMapping("/{id}/check")
-    public String check(@PathVariable(name = "id",required = false) Integer id, HttpServletRequest request){
+    public String check(@PathVariable(name = "id",required = false) Integer id, @RequestParam(name = "referrer",required = false) String referrer
+            ,@RequestParam(name = "phone",required = false) String phone,  HttpServletRequest request){
         request.setAttribute("saleid",id);
         Optional<SaleMan> saleMan = saleRepository.findById(id);
         request.setAttribute("tel",saleMan.get().getPhone());
-        return "check";
+        request.setAttribute("referrer",referrer);
+        request.setAttribute("phone",phone);
+        return "checkv2";
     }
 }

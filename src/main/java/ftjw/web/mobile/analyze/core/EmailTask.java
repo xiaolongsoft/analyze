@@ -70,7 +70,7 @@ public class EmailTask {
     /**
      * 定时任务每次执行10条
      */
-    @Scheduled(fixedRate = 1000*60*5)
+    @Scheduled(fixedRate = 1000*60*60)
     public void autoAnalyze(){
         List<Site> list = siteRepository.findSites();
         int x=0;

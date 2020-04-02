@@ -2,23 +2,20 @@ package ftjw.web.mobile.analyze.core;
 
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
+import ftjw.web.mobile.analyze.dao.AgentRepository;
 import ftjw.web.mobile.analyze.dao.DataRepository;
 import ftjw.web.mobile.analyze.dao.SubmitRepository;
+import ftjw.web.mobile.analyze.entity.Agent;
 import ftjw.web.mobile.analyze.entity.AnalyzeData;
 import ftjw.web.mobile.analyze.entity.AnalyzeSubmit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.thymeleaf.util.StringUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import javax.validation.ConstraintViolationException;
+import java.util.*;
 
 /**
  * 殷晓龙
@@ -33,6 +30,8 @@ public class RestApi {
     private DataRepository dataRepository;
     @Resource
     private SubmitRepository submitRepository;
+    @Resource
+    private AgentRepository agentRepository;
 
     @RequestMapping("")
     public String test(){
@@ -90,28 +89,60 @@ public class RestApi {
 
     /**
      * 客户提交信息
-     * @param message
-     * @param phone
      * @return
      */
     @RequestMapping("/submit")
-    public  AnalyzeSubmit submitInfo(@RequestParam(name = "message",defaultValue = "无")String message, @RequestParam(name = "phone")String phone, @RequestParam(name = "saleid",defaultValue = "0") Integer id){
+    public Result submitInfo(AnalyzeSubmit submit) {
 
-        if(StringUtils.length(phone)<11){
-            return null;
+        try {
+            submitRepository.save(submit);
+        } catch (ConstraintViolationException e) {
+          log.info("提交格式不正确");
+          return ResultGenerator.genFailResult("提交格式不正确");
         }
-        AnalyzeSubmit submit=new AnalyzeSubmit();
-        submit.setMessage(message);
-        submit.setPhone(phone);
-        submit.setSid(id);
-        submitRepository.save(submit);
         Map parms=new HashMap();
-        parms.put("custname",message);
-        parms.put("tel",phone);
-        parms.put("userid",id);
+        parms.put("custname",submit.getName());
+        parms.put("tel",submit.getPhone());
+        parms.put("userid",submit.getSid());
+        parms.put("phone",submit.getRftel());
+        parms.put("referrer",submit.getReferrer());
         String res = HttpUtil.get("http://111.198.66.100:7180/xiansuo/leads", parms);
         log.info("新用户提交记录",res);
-        return submit;
+        return ResultGenerator.genSuccessResult("提交成功");
+    }
+
+    /**
+     * 代理商申请
+     * @return
+     */
+    @PostMapping("/agent/apply")
+    public Result agentApply(Agent agent){
+        try {
+            agent.setCtime(new Date());
+            agentRepository.save(agent);
+        } catch (Exception e) {
+            return ResultGenerator.genFailResult(e.getMessage());
+        }
+        return ResultGenerator.genSuccessResult(agent);
+    }
+
+    @PostMapping("/agent/update")
+    public Result updateAgent(@RequestParam(name = "id") Integer id,@RequestParam(name = "status") Integer status){
+        if(id==null){
+            return ResultGenerator.genEmptyResult("少id啊");
+        }
+
+        Optional<Agent> op = agentRepository.findById(id);
+        Agent  agent = op.get();
+        agentRepository.save(agent);
+        return ResultGenerator.genSuccessResult();
+    }
+
+
+    private void genAccountPassword(Agent agent){
+        agent.setAccount(ChineseCharacterUtil.getLowerCase(agent.getName(),false)+agent.getId());
+        BCryptPasswordEncoder bc=new BCryptPasswordEncoder();
+        agent.setPassword(bc.encode("123456"));
     }
 
 }

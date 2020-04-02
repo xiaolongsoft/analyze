@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="/index-v2.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="/index.js">
+       </script>
+</head>
+<body>
+
+    <div class="bwrap">
+        <input type="hidden" id="saleid" th:value="${saleid}">
+        <input type="hidden" id="tel" th:value="${tel}">
+        <input type="hidden" id="referrer" th:value="${referrer}">
+        <input type="hidden" id="rftel" th:value="${phone}">
+
+        <div id="top">
+            <div id="a">
+                <div class="title">移动化适配</div>
+                <div class="">
+                       <img src="/img/compp.png" class="spq"> 
+                </div>
+                <div><span class="desc">适配前</span> <span class="desc">适配后</span> </div>
+            </div> 
+            <div id="b">    
+                <div class="box">
+                        <div class="bg3">
+                               <div class="biaoyu">
+                                   <div class="cell"><img src="/img/ty2.png"><span>系统零改造</span></div>
+                                   <div class="cell"><img src="/img/ty2.png"><span>系统零改造</span></div>
+                                   <div class="cell"><img src="/img/ty2.png"><span>系统零改造</span></div>
+                                   <div class="cell"><img src="/img/ty2.png"><span>系统零改造</span></div>
+                                   <div class="cell" style="padding-top: 5px;"
+                                   ><span>成本</span><span class="xingmu">节约50%</span></div>
+                                   <div class="cell" style="padding-top: 5px;"><span>周期</span><span class="xingmu">缩短80%</span></div>
+                               </div> 
+
+                        </div>    
+                  </div>
+            </div>           
+        </div>
+        <div id="top2">
+            <div class="title"> <span style="color: red;">"一周"</span><span style="color:#4350AC;"> | 快速实现应用系统和网站移动化</span> </div>
+            <div class="next">
+                <img class="icon" src="/img/v1.png">
+                <img class="arrow"  src="/img/xz2.png">
+                <img class="icon2" src="/img/yhz.png">
+                <img  class="arrow" src="/img/xz1.png">
+                <img class="icon" src="/img/st1.png">
+            </div>
+            <div>
+                <span class="xiaozi" style="padding-left: 10%;">300万+企业网站</span><span class="xiaozi"  style="padding-left: 33%;">20万+政企应用系统</span>
+            </div>
+        </div>
+
+        <div class="middle">
+                <div class="box2">
+                    <div class="bg1">
+                        <div class="title"><span>可查看您现在有网站移动化的情况，试试吧!</span></div>
+                        <div class="input-wrap">
+                            <input type="url">
+                            <span id="getfraction">
+                                <img src="/img/search.png" alt="">
+                            </span>
+                        </div>  
+                        <div id="review_box">
+                            <ul id="comment1">
+                                <li>2分钟前，www.***.com测评过</li>
+                                <li>5分钟前，www.***.cn</li>
+                                <li>8分钟前，www.***.com测评过</li>
+                                <li>30分钟前，www.***.cn</li>
+                                <li>2分钟前，www.***.cn</li>
+                                <li>5分钟前，www.***.com测评过</li>
+                            </ul>
+                            <ul id="comment2"></ul>
+                        </div>
+                    </div>
+
+             
+                </div>            
+            <button class="freeget">免费获取专业1对1咨询</button>
+        </div>
+
+    </div>
+
+    <footer>
+        <button id="call_sale">
+            <img src="/img/s-p.png" alt="">电话咨询
+        </button>
+        <button class="freeget">
+            <img src="/img/turn.png" alt="">免费体验
+        </button>
+    </footer>
+
+
+    <div id="hot">
+        <div class="hbzs"><a href="/web/submit">
+            <span>火爆招商</span>
+            <img src="/img/jx1.png"> </a>
+        </div>
+
+    </div>
+
+
+    <div class="dialog-wrap"  style="display: none;">
+        <div class="dialog" >
+            <!-- 咨询 -->
+            <div id="freed" class="free" style="display: none;">
+                <p class="tc">免费获取专业1对1咨询</p>
+                <div style="padding:0 10px">
+                    <div class="free-title">姓名</div>
+                    <input id="textarea" type="text" placeholder="请输入您的姓名" >
+                    <div class="free-title">联系方式</div>
+                    <input id="phone" type="text" placeholder="请输入您的联系方式" >
+                </div>
+                <div id="area">
+                    <div class="ppp">
+                      <input onclick="hidep('province_input')" type="text" value="省" id="province" class="select_input" readonly="" /><img src="/img/down.png">
+                      <div id="province_input" style="display:none " class="select_content"></div>
+                     </div>
+                     <div class="ppp">
+                      <input onclick="hidec('city_input')" type="text" value="市" id="city" class="select_input" readonly=""/><img src="/img/down.png">
+                      <div id="city_input" style="display:none " class="select_content"></div>
+                      </div>
+                      <div></div>
+                    </div>
+                <div class="tc">
+                    <button>提交</button>
+                </div>
+            </div>
+            <!-- 加载中 -->
+            <div id="yhloading" class="youhua" style="display: none;">
+                <div class="yh-title">
+                    <div>
+                        <img src="/img/load.gif" alt="">
+                       <p class="load-text">正在检测中...</p>
+                    </div>
+                </div>
+                <div class="btn">
+                    <button class="color-btn">人工获取更专业报告</button>
+                    <button class="kong-btn" >重新检测</button>
+               </div>
+            </div>
+            <!-- 60优化 -->
+           <div id="youhuad" class="youhua" style="display: none;">
+                <div class="yh-title">
+                    <div>
+                        <img src="/img/60.png" alt="">
+                    </div>
+                   
+                </div>
+                <!-- <p class="yh-text">Page is mobile friendly</p> -->
+                <p class="yh-text">不错，网站可以继续优化</p>
+                <p class="yh-time">测试时间：2020.3.18   上午9:20</p>
+                <div class="tc">
+                    <button class="freeget">了解更多</button>
+                </div>
+           </div>
+           <!-- 0优化 -->
+           <div id="youhua1d" class="youhua youhua1" style="display: none;">
+                <div class="yh-title">
+                    <div>
+                        <img src="/img/0.png" alt="">
+                    </div>
+                
+                </div>
+                <!-- <p class="yh-text red">Page is not mobile friendly</p> -->
+                <p class="yh-text">糟糕，网站没有适配</p>
+                <p class="yh-time">测试时间：2020.3.18   上午9:20</p>
+                <ul class="c333">
+                    <li><span></span> 可点击元素之间的距离太近</li>
+                    <li><span></span>文字太小，无法阅读</li>
+                    <li><span></span>未设置视口值，布局有些乱</li>
+                </ul>
+                <div class="tc">
+                    <button class="freeget">免费获得优化方案</button>
+                </div>
+        </div>
+
+        </div>
+    </div>
+</body>
+</html>

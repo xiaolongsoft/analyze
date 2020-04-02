@@ -1,8 +1,10 @@
 package ftjw.web.mobile.analyze.entity;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * 殷晓龙
@@ -17,12 +19,22 @@ public class AnalyzeSubmit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     /**
-     * 客户留言
+     * 客户姓名
      */
-    String message;
+    @NotNull
+    String name;
     /**
      * 电话
      */
+    @NotNull
+    @Length(min = 11)
     String phone;
     Integer sid;
+    String province;
+    String city;
+    /**
+     * 推荐人
+     */
+    String referrer;
+    String rftel;
 }
