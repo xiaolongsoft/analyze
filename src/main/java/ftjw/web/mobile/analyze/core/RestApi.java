@@ -3,9 +3,11 @@ package ftjw.web.mobile.analyze.core;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
 import ftjw.web.mobile.analyze.dao.AgentRepository;
+import ftjw.web.mobile.analyze.dao.AgentUserRepository;
 import ftjw.web.mobile.analyze.dao.DataRepository;
 import ftjw.web.mobile.analyze.dao.SubmitRepository;
 import ftjw.web.mobile.analyze.entity.Agent;
+import ftjw.web.mobile.analyze.entity.AgentUser;
 import ftjw.web.mobile.analyze.entity.AnalyzeData;
 import ftjw.web.mobile.analyze.entity.AnalyzeSubmit;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,8 @@ public class RestApi {
     private SubmitRepository submitRepository;
     @Resource
     private AgentRepository agentRepository;
+    @Resource
+    private AgentUserRepository agentUserRepository;
 
     @RequestMapping("")
     public String test(){
@@ -42,10 +46,18 @@ public class RestApi {
         return "name:"+name+" ,id:"+id;
     }
 
+    /**
+     * 移动化网站分析统计
+     * @param keywords
+     * @param status
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     @RequestMapping("/list")
     @ResponseBody
     public Page list(@RequestParam(required = false) String keywords,@RequestParam(required = false) Integer status, @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
-        PageRequest request= PageRequest.of(pageIndex,pageSize, Sort.by("id"));
+        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("id"));
         AnalyzeData analyzeData=new AnalyzeData();
         analyzeData.setName(keywords);
         analyzeData.setStatus(status);
@@ -136,6 +148,54 @@ public class RestApi {
         Agent  agent = op.get();
         agentRepository.save(agent);
         return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 代理商客户列表
+     * @param id
+     * @param keywords
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @PostMapping("/agent/users")
+    public Result agentUsers(@RequestParam(name = "id") Integer id,@RequestParam(name = "keywords") String keywords,
+                            @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
+        if(id==null){
+            return ResultGenerator.genEmptyResult("少id啊");
+        }
+        PageRequest request= PageRequest.of(pageIndex,pageSize, Sort.by("userId"));
+        AgentUser agent=new AgentUser();
+        agent.setAgentId(id);
+        agent.setStatus(1);
+        Page<AgentUser> all = agentUserRepository.findAll(Example.of(agent), request);
+        return ResultGenerator.genSuccessResult(all);
+    }
+
+    /**
+     * 代理商列表
+     * @param id
+     * @param keywords
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @PostMapping("/agent/list")
+    public Result agentList(@RequestParam(name = "id") Integer id,@RequestParam(name = "keywords") String keywords,
+                            @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
+        if(id==null){
+            return ResultGenerator.genEmptyResult("少id啊");
+        }
+        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("userId"));
+        Agent agent=new Agent();
+        agent.setName(keywords);
+        agent.setStatus(1);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withMatcher("account", ExampleMatcher.GenericPropertyMatchers.contains())
+                .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains());
+
+        Page<Agent> all = agentRepository.findAll(Example.of(agent,matcher), request);
+        return ResultGenerator.genSuccessResult(all);
     }
 
 
