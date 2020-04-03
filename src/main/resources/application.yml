@@ -46,7 +46,7 @@ spring:
             max-request-size: 10MB
     jackson:
         time-zone: GMT+8
-        date-format: yyyy-MM-dd HH:mm:s
+        date-format: yyyy-MM-dd HH:mm
     mail:
         host: smtp.163.com
         username: phoenixoop@163.com

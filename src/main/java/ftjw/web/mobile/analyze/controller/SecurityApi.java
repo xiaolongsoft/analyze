@@ -1,4 +1,4 @@
-package ftjw.web.mobile.analyze.core;
+package ftjw.web.mobile.analyze.controller;
 
 import lombok.Data;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 2020/3/25 16:49
  */
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/aa")
 @Data
 public class SecurityApi {
     @RequestMapping("")

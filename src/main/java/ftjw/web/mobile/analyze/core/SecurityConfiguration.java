@@ -25,7 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .mvcMatchers("/api/**")
-                .hasAnyRole("AGENT,ADMIN")
+                .permitAll()
                 .and()
                 .formLogin()
                 .successHandler(new SimpleUrlAuthenticationSuccessHandler("/web/index"))
@@ -58,33 +58,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 }
 
-@Configuration
-@EnableWebSecurity
-@Order(50)
- class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .mvcMatchers("/web/index","/web/analyze" , "/user/**")
-                .hasRole("USER")
-                .mvcMatchers("/admin/**")
-                .hasRole("ADMIN")
-                .and()
-                .formLogin()
-                .successHandler(new SimpleUrlAuthenticationSuccessHandler("/web/index"))
-                .and()
-                .httpBasic();
-        http.csrf().disable();
-    }
-    @Autowired
-    AgentUserDetailService userDetailService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailService)
-                .passwordEncoder(new BCryptPasswordEncoder());
-
-    }
-
-}

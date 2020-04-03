@@ -1,4 +1,4 @@
-package ftjw.web.mobile.analyze.core;
+package ftjw.web.mobile.analyze.controller;
 
 import ftjw.web.mobile.analyze.dao.DataRepository;
 import ftjw.web.mobile.analyze.dao.SaleRepository;

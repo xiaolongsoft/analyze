@@ -6,6 +6,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -15,31 +16,24 @@ import java.util.List;
  * 2020/3/17 11:06
  */
 @Configuration
-public class WebConf extends WebMvcConfigurationSupport {
+public class WebConf implements WebMvcConfigurer {
 
     @Override
-    protected void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("POST","GET").maxAge(3600)
                 .allowCredentials(true);
-        super.addCorsMappings(registry);
     }
 
     @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
             registry.addResourceHandler("/**")
                     .addResourceLocations("classpath:/resources/")
                     .addResourceLocations("classpath:/static/")
                     .addResourceLocations("classpath:/public/");
-            super.addResourceHandlers(registry);
+
     }
 
-
-    @Override
-    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
-        super.configureMessageConverters(converters);
-    }
 }

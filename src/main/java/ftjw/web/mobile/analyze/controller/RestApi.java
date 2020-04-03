@@ -1,15 +1,13 @@
-package ftjw.web.mobile.analyze.core;
+package ftjw.web.mobile.analyze.controller;
 
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
-import ftjw.web.mobile.analyze.dao.AgentRepository;
-import ftjw.web.mobile.analyze.dao.AgentUserRepository;
-import ftjw.web.mobile.analyze.dao.DataRepository;
-import ftjw.web.mobile.analyze.dao.SubmitRepository;
-import ftjw.web.mobile.analyze.entity.Agent;
-import ftjw.web.mobile.analyze.entity.AgentUser;
-import ftjw.web.mobile.analyze.entity.AnalyzeData;
-import ftjw.web.mobile.analyze.entity.AnalyzeSubmit;
+import ftjw.web.mobile.analyze.core.ChineseCharacterUtil;
+import ftjw.web.mobile.analyze.core.Result;
+import ftjw.web.mobile.analyze.core.ResultGenerator;
+import ftjw.web.mobile.analyze.core.SeleniumAnalyze;
+import ftjw.web.mobile.analyze.dao.*;
+import ftjw.web.mobile.analyze.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +18,7 @@ import javax.validation.ConstraintViolationException;
 import java.util.*;
 
 /**
+ * web端无需验证的接口
  * 殷晓龙
  * 2020/3/16 17:47
  */
@@ -32,10 +31,8 @@ public class RestApi {
     private DataRepository dataRepository;
     @Resource
     private SubmitRepository submitRepository;
-    @Resource
-    private AgentRepository agentRepository;
-    @Resource
-    private AgentUserRepository agentUserRepository;
+
+
 
     @RequestMapping("")
     public String test(){
@@ -76,7 +73,8 @@ public class RestApi {
     }
 
 
-
+    @Resource
+    UrlRepository urlRepository;
 
     @RequestMapping("/check")
     @ResponseBody
@@ -96,6 +94,10 @@ public class RestApi {
         }else {
             map.put("score",new Random().nextInt(31));
         }
+        UrlAccessLog urlAccessLog=new UrlAccessLog();
+        urlAccessLog.setDate(new Date());
+        urlAccessLog.setUrl(url);
+        urlRepository.save(urlAccessLog);
         return map;
     }
 
@@ -123,80 +125,10 @@ public class RestApi {
         return ResultGenerator.genSuccessResult("提交成功");
     }
 
-    /**
-     * 代理商申请
-     * @return
-     */
-    @PostMapping("/agent/apply")
-    public Result agentApply(Agent agent){
-        try {
-            agent.setCtime(new Date());
-            agentRepository.save(agent);
-        } catch (Exception e) {
-            return ResultGenerator.genFailResult(e.getMessage());
-        }
-        return ResultGenerator.genSuccessResult(agent);
-    }
 
-    @PostMapping("/agent/update")
-    public Result updateAgent(@RequestParam(name = "id") Integer id,@RequestParam(name = "status") Integer status){
-        if(id==null){
-            return ResultGenerator.genEmptyResult("少id啊");
-        }
 
-        Optional<Agent> op = agentRepository.findById(id);
-        Agent  agent = op.get();
-        agentRepository.save(agent);
-        return ResultGenerator.genSuccessResult();
-    }
 
-    /**
-     * 代理商客户列表
-     * @param id
-     * @param keywords
-     * @param pageIndex
-     * @param pageSize
-     * @return
-     */
-    @PostMapping("/agent/users")
-    public Result agentUsers(@RequestParam(name = "id") Integer id,@RequestParam(name = "keywords") String keywords,
-                            @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
-        if(id==null){
-            return ResultGenerator.genEmptyResult("少id啊");
-        }
-        PageRequest request= PageRequest.of(pageIndex,pageSize, Sort.by("userId"));
-        AgentUser agent=new AgentUser();
-        agent.setAgentId(id);
-        agent.setStatus(1);
-        Page<AgentUser> all = agentUserRepository.findAll(Example.of(agent), request);
-        return ResultGenerator.genSuccessResult(all);
-    }
 
-    /**
-     * 代理商列表
-     * @param id
-     * @param keywords
-     * @param pageIndex
-     * @param pageSize
-     * @return
-     */
-    @PostMapping("/agent/list")
-    public Result agentList(@RequestParam(name = "id") Integer id,@RequestParam(name = "keywords") String keywords,
-                            @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
-        if(id==null){
-            return ResultGenerator.genEmptyResult("少id啊");
-        }
-        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("userId"));
-        Agent agent=new Agent();
-        agent.setName(keywords);
-        agent.setStatus(1);
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("account", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains());
-
-        Page<Agent> all = agentRepository.findAll(Example.of(agent,matcher), request);
-        return ResultGenerator.genSuccessResult(all);
-    }
 
 
     private void genAccountPassword(Agent agent){

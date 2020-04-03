@@ -1,6 +1,8 @@
 package ftjw.web.mobile.analyze.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GeneratorType;
 import org.hibernate.validator.constraints.Length;
 
@@ -15,6 +17,8 @@ import java.util.Date;
  */
 @Entity
 @Data
+@DynamicUpdate
+@DynamicInsert
 @Table(name = "ydh_agent")
 public class Agent {
     @Id

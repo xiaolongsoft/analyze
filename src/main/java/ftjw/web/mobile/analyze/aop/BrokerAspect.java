@@ -1,6 +1,5 @@
 package ftjw.web.mobile.analyze.aop;
 
-import ftjw.web.mobile.analyze.core.SecurityApi;
 import ftjw.web.mobile.analyze.core.SeleniumAnalyze;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;

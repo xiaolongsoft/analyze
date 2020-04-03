@@ -80,7 +80,11 @@ $(function () {
         return false
     })
     $('#call_sale').click(function () {
-        window.location.href="tel:"+$("#tel").val();
+        var tel=$("#tel").val();
+        if($("#rftel").val()){
+            tel=$("#rftel").val()
+        }
+        window.location.href="tel:"+tel;
         return false
     })
 
