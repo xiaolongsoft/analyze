@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 /**
@@ -24,14 +25,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .mvcMatchers("/api/**")
-                .permitAll()
+                .mvcMatchers("/api/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/agent/**").hasAnyRole("ADMIN","AGENT")
                 .and()
                 .formLogin()
+                .loginPage("http://192.168.18.105:8080/login")
+                .loginProcessingUrl("/login")
                 .successHandler(new SimpleUrlAuthenticationSuccessHandler("/web/index"))
                 .and()
+                .logout().logoutUrl("/logout").and()
                 .httpBasic();
         http.csrf().disable();
+        http.cors().disable();
     }
     @Autowired
     AgentUserDetailService userDetailService;

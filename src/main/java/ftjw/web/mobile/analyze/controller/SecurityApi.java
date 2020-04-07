@@ -60,14 +60,3 @@ class User{
         return " some product info,currentUser is: "+currentUser;
     }
 }
-
-
-@Controller
-@RequestMapping("/err")
- class ErrPage {
-    @RequestMapping("")
-    @ResponseBody
-    public String err(){
-        return "应该是出了啥问题";
-    }
-}

@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,13 +24,14 @@ public class EmailSender {
     private  String from;
     @Autowired
     JavaMailSender sender;
-    public void  sendEmail(List<String> emails,String title,String content){
-        SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
-        simpleMailMessage.setFrom(from);
-        simpleMailMessage.setTo( emails.stream().collect(Collectors.joining(",")));
-        simpleMailMessage.setSubject(title);
-        simpleMailMessage.setText(content);
-        sender.send(simpleMailMessage);
+    public void  sendEmail(String[] emails,String title,String content) throws MessagingException {
+        MimeMessage msg=sender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+        helper.setFrom(from);
+        helper.setTo(emails);
+        helper.setSubject(title);
+        helper.setText(content,true);
+        sender.send(msg);
 
     }
 }

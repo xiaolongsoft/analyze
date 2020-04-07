@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public class EmailTask {
 
 
     @Scheduled(cron = "0  30  18  ?  *  MON-FRI")
-    public void sendEmail(){
+    public void sendEmail() throws MessagingException {
         List<Map<String, Object>> maps = dataRepository.countAnalyzeDataByStatus();
         StringBuilder sb=new StringBuilder("本周移动化网站数据分析\r\n");
         maps.forEach(m->{
@@ -63,14 +64,14 @@ public class EmailTask {
 
         List<SaleMan> saleManList = saleRepository.findByEmailNotNull();
         List<String> emalis = saleManList.stream().map(SaleMan::getEmail).collect(Collectors.toList());
-
-        emailSender.sendEmail(emalis,"移动化网站数据分析报告",sb.toString());
+        String[] array2 = emalis.toArray(new String[emalis.size()]);
+        emailSender.sendEmail(array2,"移动化网站数据分析报告",sb.toString());
     }
 
     /**
      * 定时任务每次执行10条
      */
-    @Scheduled(fixedRate = 1000*60*60)
+    @Scheduled(fixedRate = 1000*60*60*3)
     public void autoAnalyze(){
         List<Site> list = siteRepository.findSites();
         int x=0;

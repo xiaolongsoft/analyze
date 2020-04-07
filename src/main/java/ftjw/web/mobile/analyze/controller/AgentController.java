@@ -6,7 +6,10 @@ import ftjw.web.mobile.analyze.core.UpdateTool;
 import ftjw.web.mobile.analyze.dao.*;
 import ftjw.web.mobile.analyze.entity.*;
 import ftjw.web.mobile.analyze.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -147,5 +150,29 @@ public class AgentController {
         PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("id"));
         Page<UserPayLog> page = userPayLogRepository.findAll(Example.of(upl), request);
         return  ResultGenerator.genSuccessResult(page);
+    }
+
+      @Autowired
+      PasswordEncoder passwordEncoder;
+
+
+    /**
+     * 用户修改密码
+     * @param account
+     * @param oldpwd
+     * @param newpwd
+     * @return
+     */
+    @PostMapping("/change/password")
+    public Result changePassword(@RequestParam(name = "account")String account,@RequestParam(name = "oldpwd")String oldpwd,@RequestParam(name = "newpwd")String newpwd){
+        Agent agent = agentRepository.findOneByAccount(account);
+        boolean matches = passwordEncoder.matches(oldpwd, agent.getPassword());
+        if(matches){
+            agent.setPassword(passwordEncoder.encode(newpwd));
+            agentRepository.save(agent);
+        }else {
+            return ResultGenerator.genFailResult("原始账号/密码不正确。");
+        }
+        return ResultGenerator.genSuccessResult("修改成功");
     }
 }
