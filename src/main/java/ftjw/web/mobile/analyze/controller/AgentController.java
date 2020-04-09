@@ -101,7 +101,7 @@ public class AgentController {
         if(id==null){
             return ResultGenerator.genEmptyResult("少id啊");
         }
-        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("userId"));
+        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"userId"));
         AgentUser agent=new AgentUser();
         agent.setAgentId(id);
         agent.setStatus(1);
@@ -147,7 +147,7 @@ public class AgentController {
             ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
         UserPayLog upl=new UserPayLog();
         upl.setUserId(id);
-        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("id"));
+        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
         Page<UserPayLog> page = userPayLogRepository.findAll(Example.of(upl), request);
         return  ResultGenerator.genSuccessResult(page);
     }

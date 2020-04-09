@@ -19,25 +19,27 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
  */
 @Configuration
 @EnableWebSecurity
-@Order(80)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .mvcMatchers("/api/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/agent/**").hasAnyRole("ADMIN","AGENT")
+//                .mvcMatchers("/api/**","/login").permitAll()
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+//                .antMatchers("/agent/**").hasAnyRole("ADMIN","AGENT")
+//                .and()
+//                .formLogin()
+//                .loginPage("https://ydhtg.wqying.cn/vue/")
+//                .loginProcessingUrl("/login")
+//                .successHandler(new SimpleUrlAuthenticationSuccessHandler("https://ydhtg.wqying.cn/vue/dashboard"))
+//                .and()
+//                .logout()
+//                .logoutUrl("/logout")
+//                .logoutSuccessUrl("https://ydhtg.wqying.cn/vue/")
+                .anyRequest().permitAll()
                 .and()
-                .formLogin()
-                .loginPage("http://192.168.18.105:8080/login")
-                .loginProcessingUrl("/login")
-                .successHandler(new SimpleUrlAuthenticationSuccessHandler("/web/index"))
-                .and()
-                .logout().logoutUrl("/logout").and()
                 .httpBasic();
         http.csrf().disable();
-        http.cors().disable();
     }
     @Autowired
     AgentUserDetailService userDetailService;

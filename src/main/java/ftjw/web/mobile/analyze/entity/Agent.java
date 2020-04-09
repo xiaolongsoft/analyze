@@ -46,7 +46,7 @@ public class Agent {
      */
     String  code;
     /**
-     * 状态    0.暂停 1.有效  2 申请中 3，过期
+     * 状态    0.暂停 1.有效  2 申请中 3，过期 4.拒绝
      */
     @Column
     Integer status;

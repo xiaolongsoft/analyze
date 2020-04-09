@@ -9,12 +9,16 @@ import ftjw.web.mobile.analyze.core.SeleniumAnalyze;
 import ftjw.web.mobile.analyze.dao.*;
 import ftjw.web.mobile.analyze.entity.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -32,6 +36,30 @@ public class RestApi {
     @Resource
     private SubmitRepository submitRepository;
 
+    @Resource
+    private AgentRepository agentRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @PostMapping("/login")
+    public Result logiin(@RequestParam(name = "username")String username,@RequestParam(name = "password") String password){
+        Agent account = agentRepository.findOneByAccount(username);
+        if(account==null){
+            return ResultGenerator.genFailResult("账号/密码错误。");
+        }
+        boolean matches = passwordEncoder.matches(password, account.getPassword());
+        if(matches){
+            Map map=new HashMap();
+            map.put("username",username);
+            map.put("token",passwordEncoder.encode(username));
+            map.put("role",account.getRole());
+            return ResultGenerator.genSuccessResult(map);
+        }else {
+            return ResultGenerator.genFailResult("账号/密码错误。");
+        }
+
+    }
 
 
     @RequestMapping("")
@@ -53,7 +81,7 @@ public class RestApi {
      */
     @RequestMapping("/list")
     @ResponseBody
-    public Page list(@RequestParam(required = false) String keywords,@RequestParam(required = false) Integer status, @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
+    public Result list(@RequestParam(required = false) String keywords,@RequestParam(required = false) Integer status, @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
         PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("id"));
         AnalyzeData analyzeData=new AnalyzeData();
         analyzeData.setName(keywords);
@@ -63,7 +91,7 @@ public class RestApi {
                 ;
         Example exp=Example.of(analyzeData,matcher);
         Page page=dataRepository.findAll(exp,request);
-        return page;
+        return ResultGenerator.genSuccessResult(page);
     }
     @RequestMapping("/analyzeCount")
     @ResponseBody
@@ -123,18 +151,6 @@ public class RestApi {
         String res = HttpUtil.get("http://111.198.66.100:7180/xiansuo/leads", parms);
         log.info("新用户提交记录",res);
         return ResultGenerator.genSuccessResult("提交成功");
-    }
-
-
-
-
-
-
-
-    private void genAccountPassword(Agent agent){
-        agent.setAccount(ChineseCharacterUtil.getLowerCase(agent.getName(),false)+agent.getId());
-        BCryptPasswordEncoder bc=new BCryptPasswordEncoder();
-        agent.setPassword(bc.encode("123456"));
     }
 
 }

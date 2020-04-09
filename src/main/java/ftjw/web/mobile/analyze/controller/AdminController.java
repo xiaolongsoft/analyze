@@ -7,7 +7,10 @@ import ftjw.web.mobile.analyze.dao.AgentPayLogRepository;
 import ftjw.web.mobile.analyze.dao.AgentRepository;
 import ftjw.web.mobile.analyze.entity.Agent;
 import ftjw.web.mobile.analyze.entity.AgentPayLog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,13 +39,15 @@ public class AdminController {
      * @return
      */
     @PostMapping("/agent/list")
-    public Result agentList(@RequestParam(name = "keywords") String keywords, @RequestParam(name = "status",defaultValue = "1") Integer status,
+    public Result agentList(@RequestParam(name = "keywords",required = false) String keywords, @RequestParam(name = "status",defaultValue = "1") Integer status,
                             @RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
 
-        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("id"));
+        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
         Agent agent=new Agent();
-        agent.setName(keywords);
-        agent.setAccount(keywords);
+        if(!StringUtils.isEmpty(keywords)){
+            agent.setName(keywords);
+            agent.setAccount(keywords);
+        }
         agent.setStatus(status);
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("account", ExampleMatcher.GenericPropertyMatchers.contains())
@@ -51,6 +56,9 @@ public class AdminController {
         Page<Agent> all = agentRepository.findAll(Example.of(agent,matcher), request);
         return ResultGenerator.genSuccessResult(all);
     }
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @PostMapping("/agent/update")
     public Result updateAgent(@RequestParam(name = "id") Integer id,@RequestParam(name = "status") Integer status){
@@ -62,8 +70,13 @@ public class AdminController {
         Agent  agent = op.get();
 
         Agent a=new Agent();
+        if(1==status&&agent.getAccount()==null&&agent.getPassword()==null){
+            a.setAccount(agent.getPhone());
+            a.setPassword(passwordEncoder.encode(agent.getPhone()));
+        }
         a.setStatus(status);
         UpdateTool.copyNullProperties(agent,a);
+
         agentRepository.save(a);
         return ResultGenerator.genSuccessResult();
     }
@@ -75,7 +88,7 @@ public class AdminController {
     ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
         AgentPayLog apl=new AgentPayLog();
         apl.setAgentId(id);
-        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("id"));
+        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
         Page<AgentPayLog> page = agentPayLogRepository.findAll(Example.of(apl), request);
         return  ResultGenerator.genSuccessResult(page);
     }
