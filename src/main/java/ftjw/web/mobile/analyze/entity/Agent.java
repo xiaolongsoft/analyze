@@ -3,11 +3,10 @@ package ftjw.web.mobile.analyze.entity;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GeneratorType;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -35,7 +34,7 @@ public class Agent {
     /**
      * 代理商公司名称
      */
-    @NotNull
+    @NotNull(message = "代理商名称不能为空")
     String name;
     /**
      * 申请时间
@@ -70,12 +69,13 @@ public class Agent {
     /**
      * 联系人
      */
-    @NotNull
+    @NotNull(message="联系人信息不能为空")
     String contacts;
     /**
      * 联系人手机
      */
-    @Length(min = 11)
+    @NotNull(message = "phone 手机号不能为空")
+    @Size(min = 7,max = 11,message = "手机号格式不正确")
     String phone;
     /**
      * 微信
@@ -86,5 +86,14 @@ public class Agent {
      * 购买意向
      */
     String intention;
+
+    /**
+     * 省
+     */
+    String province;
+    /**
+     * 市
+     */
+    String city;
 
 }

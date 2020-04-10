@@ -2,24 +2,27 @@ package ftjw.web.mobile.analyze.controller;
 
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
-import ftjw.web.mobile.analyze.core.ChineseCharacterUtil;
 import ftjw.web.mobile.analyze.core.Result;
 import ftjw.web.mobile.analyze.core.ResultGenerator;
 import ftjw.web.mobile.analyze.core.SeleniumAnalyze;
 import ftjw.web.mobile.analyze.dao.*;
 import ftjw.web.mobile.analyze.entity.*;
+import ftjw.web.mobile.analyze.security.IsAdmin;
+import ftjw.web.mobile.analyze.security.IsAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
-import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * web端无需验证的接口
@@ -42,30 +45,35 @@ public class RestApi {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @PostMapping("/login")
-    public Result logiin(@RequestParam(name = "username")String username,@RequestParam(name = "password") String password){
-        Agent account = agentRepository.findOneByAccount(username);
-        if(account==null){
-            return ResultGenerator.genFailResult("账号/密码错误。");
-        }
-        boolean matches = passwordEncoder.matches(password, account.getPassword());
-        if(matches){
-            Map map=new HashMap();
-            map.put("username",username);
-            map.put("token",passwordEncoder.encode(username));
-            map.put("role",account.getRole());
-            return ResultGenerator.genSuccessResult(map);
-        }else {
-            return ResultGenerator.genFailResult("账号/密码错误。");
-        }
-
-    }
+//    @PostMapping("/login")
+//    public Result logiin(@RequestParam(name = "username")String username,@RequestParam(name = "password") String password){
+//        Agent account = agentRepository.findOneByAccount(username);
+//        if(account==null){
+//            return ResultGenerator.genFailResult("账号/密码错误。");
+//        }
+//        boolean matches = passwordEncoder.matches(password, account.getPassword());
+//        if(matches){
+//            Map map=new HashMap();
+//            map.put("username",username);
+//            map.put("token",passwordEncoder.encode(username));
+//            map.put("role",account.getRole());
+//            return ResultGenerator.genSuccessResult(map);
+//        }else {
+//            return ResultGenerator.genFailResult("账号/密码错误。");
+//        }
+//
+//    }
 
 
     @RequestMapping("")
-    public String test(){
-        return "ok";
+    @IsAdmin
+    public UsernamePasswordAuthenticationToken test(@AuthenticationPrincipal UsernamePasswordAuthenticationToken token){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
+        return token;
     }
+
+    @IsAgent
     @RequestMapping("/p")
     public String testPost(String name,Integer id){
         return "name:"+name+" ,id:"+id;
@@ -81,7 +89,7 @@ public class RestApi {
      */
     @RequestMapping("/list")
     @ResponseBody
-    public Result list(@RequestParam(required = false) String keywords,@RequestParam(required = false) Integer status, @RequestParam(defaultValue = "0") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
+    public Result list(@RequestParam(required = false) String keywords,@RequestParam(required = false) Integer status, @RequestParam(defaultValue = "1") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
         PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by("id"));
         AnalyzeData analyzeData=new AnalyzeData();
         analyzeData.setName(keywords);
@@ -106,7 +114,7 @@ public class RestApi {
 
     @RequestMapping("/check")
     @ResponseBody
-    public Map analyzeUrl(String url){
+    public Map analyzeUrl(@RequestParam(name = "url") String url,@RequestParam(name = "sid") Integer sid){
         url=URLUtil.normalize(url);
         Map map=new HashMap();
         SeleniumAnalyze seleniumAnalyze=new SeleniumAnalyze();
@@ -125,6 +133,7 @@ public class RestApi {
         UrlAccessLog urlAccessLog=new UrlAccessLog();
         urlAccessLog.setDate(new Date());
         urlAccessLog.setUrl(url);
+        urlAccessLog.setSid(sid);
         urlRepository.save(urlAccessLog);
         return map;
     }
@@ -152,5 +161,26 @@ public class RestApi {
         log.info("新用户提交记录",res);
         return ResultGenerator.genSuccessResult("提交成功");
     }
+
+    @Resource
+    SaleRepository saleRepository;
+
+    @PostMapping("/url/access/log")
+    public Result urlAccessLog(@RequestParam(name = "sid",required = false) Integer sid,@RequestParam(defaultValue = "1") Integer pageIndex,@RequestParam (defaultValue = "20") Integer pageSize){
+        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
+        UrlAccessLog ual=new UrlAccessLog();
+        ual.setSid(sid);
+        Page<UrlAccessLog> all = urlRepository.findAll(Example.of(ual), request);
+        List<SaleMan> saleManList = saleRepository.findAll();
+        Map<Integer, String> collect = saleManList.stream().collect(Collectors.toMap(SaleMan::getId, SaleMan::getName));
+        for (UrlAccessLog u : all) {
+            u.setName(collect.get(u.getSid()));
+        }
+        List l=new ArrayList();
+        l.add(all);
+        l.add(saleManList);
+        return ResultGenerator.genSuccessResult(l);
+    }
+
 
 }

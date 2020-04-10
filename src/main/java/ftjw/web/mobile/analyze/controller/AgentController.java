@@ -2,13 +2,12 @@ package ftjw.web.mobile.analyze.controller;
 
 import ftjw.web.mobile.analyze.core.Result;
 import ftjw.web.mobile.analyze.core.ResultGenerator;
-import ftjw.web.mobile.analyze.core.UpdateTool;
+import ftjw.web.mobile.analyze.utill.UpdateTool;
 import ftjw.web.mobile.analyze.dao.*;
 import ftjw.web.mobile.analyze.entity.*;
 import ftjw.web.mobile.analyze.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +48,7 @@ public class AgentController {
     @PostMapping("/apply")
     public Result agentApply(Agent agent){
         try {
+            agent.setStatus(2);
             agent.setCtime(new Date());
             agentRepository.save(agent);
         } catch (Exception e) {

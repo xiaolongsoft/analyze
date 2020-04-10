@@ -52,9 +52,10 @@ $(function () {
             return
         }
         hide()
+        var sid=$('#saleid').val();
         $('.dialog-wrap').show()
         $('#yhloading').show()
-        ajaxGet =$.get('/api/check', { url: urlweb }, function (res) {
+        ajaxGet =$.get('/api/check', { url: urlweb,sid:sid}, function (res) {
             $('.yh-time').text("测试时间：" + new Date().format())
             if (res.score >= 60) {
                 $(".dialog").addClass("active0")

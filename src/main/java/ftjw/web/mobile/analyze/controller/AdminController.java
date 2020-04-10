@@ -2,7 +2,7 @@ package ftjw.web.mobile.analyze.controller;
 
 import ftjw.web.mobile.analyze.core.Result;
 import ftjw.web.mobile.analyze.core.ResultGenerator;
-import ftjw.web.mobile.analyze.core.UpdateTool;
+import ftjw.web.mobile.analyze.utill.UpdateTool;
 import ftjw.web.mobile.analyze.dao.AgentPayLogRepository;
 import ftjw.web.mobile.analyze.dao.AgentRepository;
 import ftjw.web.mobile.analyze.entity.Agent;
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -30,6 +32,24 @@ public class AdminController {
 
     @Resource
     private AgentRepository agentRepository;
+
+    /**
+     * 管理员直接创建代理商账号
+     * @return
+     */
+    @PostMapping("/agent/create")
+    public Result agentApply(@Valid Agent agent){
+        try {
+            agent.setStatus(2);
+            agent.setCtime(new Date());
+            genAccount(agent);
+            agent.setStatus(1);
+            agentRepository.save(agent);
+        } catch (Exception e) {
+            return ResultGenerator.genFailResult(e.getMessage());
+        }
+        return ResultGenerator.genSuccessResult(agent);
+    }
 
     /**
      * 代理商列表
@@ -71,8 +91,7 @@ public class AdminController {
 
         Agent a=new Agent();
         if(1==status&&agent.getAccount()==null&&agent.getPassword()==null){
-            a.setAccount(agent.getPhone());
-            a.setPassword(passwordEncoder.encode(agent.getPhone()));
+            genAccount(agent);
         }
         a.setStatus(status);
         UpdateTool.copyNullProperties(agent,a);
@@ -80,14 +99,25 @@ public class AdminController {
         agentRepository.save(a);
         return ResultGenerator.genSuccessResult();
     }
+
+    /**
+     * 自动根据手机号生成账号密码
+     * @param agent
+     */
+    private void genAccount(Agent agent) {
+        agent.setAccount(agent.getPhone());
+        agent.setPassword(passwordEncoder.encode(agent.getPhone()));
+    }
+
     @Resource
     AgentPayLogRepository agentPayLogRepository;
 
     @PostMapping("/pay/log/list")
-    public Result payLog(@RequestParam(name = "id",required = false)Integer id
+    public Result payLog(@RequestParam(name = "id",required = false)Integer id,@RequestParam(name = "action")String action
     ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
         AgentPayLog apl=new AgentPayLog();
         apl.setAgentId(id);
+        apl.setAction(action);
         PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
         Page<AgentPayLog> page = agentPayLogRepository.findAll(Example.of(apl), request);
         return  ResultGenerator.genSuccessResult(page);

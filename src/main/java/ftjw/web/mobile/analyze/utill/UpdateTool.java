@@ -1,4 +1,4 @@
-package ftjw.web.mobile.analyze.core;
+package ftjw.web.mobile.analyze.utill;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;

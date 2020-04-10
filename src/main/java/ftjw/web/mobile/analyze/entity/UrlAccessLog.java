@@ -2,10 +2,7 @@ package ftjw.web.mobile.analyze.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -21,4 +18,7 @@ public class UrlAccessLog {
     Integer id;
      Date date;
     String url;
+    Integer sid;
+    @Transient
+    String name;
 }

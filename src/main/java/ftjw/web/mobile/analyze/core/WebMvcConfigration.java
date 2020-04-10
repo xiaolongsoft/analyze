@@ -1,26 +1,21 @@
 package ftjw.web.mobile.analyze.core;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.nio.charset.Charset;
-import java.util.List;
 
 /**
  * 殷晓龙
  * 2020/3/17 11:06
  */
 @Configuration
-public class WebConf implements WebMvcConfigurer {
+public class WebMvcConfigration implements WebMvcConfigurer {
 
+    /**
+     * 解除跨域
+     * @param registry
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -29,6 +24,10 @@ public class WebConf implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 
+    /**
+     * 添加静态资源目录
+     * @param registry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 

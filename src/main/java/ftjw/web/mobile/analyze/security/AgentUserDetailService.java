@@ -1,4 +1,4 @@
-package ftjw.web.mobile.analyze.core;
+package ftjw.web.mobile.analyze.security;
 
 import ftjw.web.mobile.analyze.dao.AgentRepository;
 import ftjw.web.mobile.analyze.entity.Agent;

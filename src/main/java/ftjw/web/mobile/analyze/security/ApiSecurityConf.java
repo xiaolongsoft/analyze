@@ -1,4 +1,4 @@
-package ftjw.web.mobile.analyze.core;
+package ftjw.web.mobile.analyze.security;
 
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 

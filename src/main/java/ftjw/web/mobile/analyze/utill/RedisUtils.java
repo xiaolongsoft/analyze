@@ -1,4 +1,4 @@
-package ftjw.web.mobile.analyze.core;
+package ftjw.web.mobile.analyze.utill;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;

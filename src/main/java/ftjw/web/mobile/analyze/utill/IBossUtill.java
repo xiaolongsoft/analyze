@@ -1,4 +1,4 @@
-package ftjw.web.mobile.analyze.core;
+package ftjw.web.mobile.analyze.utill;
 
 import cn.hutool.http.HttpUtil;
 import org.apache.commons.codec.digest.DigestUtils;
