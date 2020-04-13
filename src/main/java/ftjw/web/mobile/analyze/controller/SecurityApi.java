@@ -6,12 +6,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 殷晓龙
  * 2020/3/25 16:49
  */
 @Controller
+@ApiIgnore(value = "排除在文档之外")
 @RequestMapping("/aa")
 @Data
 public class SecurityApi {
@@ -38,6 +40,7 @@ public class SecurityApi {
 }
 
 @Controller
+@ApiIgnore(value = "排除在文档之外")
 @RequestMapping("/user")
 class User{
 

@@ -2,12 +2,18 @@ package ftjw.web.mobile.analyze.controller;
 
 import ftjw.web.mobile.analyze.core.Result;
 import ftjw.web.mobile.analyze.core.ResultGenerator;
-import ftjw.web.mobile.analyze.utill.UpdateTool;
 import ftjw.web.mobile.analyze.dao.*;
-import ftjw.web.mobile.analyze.entity.*;
 import ftjw.web.mobile.analyze.entity.User;
+import ftjw.web.mobile.analyze.entity.*;
+import ftjw.web.mobile.analyze.utill.UpdateTool;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +31,7 @@ import java.util.stream.Collectors;
  * 殷晓龙
  * 2020/4/3 11:30
  */
+@Api(tags = "代理商控制器",produces = "代理商相关功能")
 @RestController
 @RequestMapping("/agent")
 public class AgentController {
@@ -41,12 +48,10 @@ public class AgentController {
     @Resource
     UserPayLogRepository userPayLogRepository;
 
-    /**
-     * 代理商申请
-     * @return
-     */
+
+    @ApiOperation("代理商申请")
     @PostMapping("/apply")
-    public Result agentApply(Agent agent){
+    public Result agentApply(Agent agent) {
         try {
             agent.setStatus(2);
             agent.setCtime(new Date());
@@ -58,10 +63,10 @@ public class AgentController {
     }
 
     /**
-     * 代理商详情
      * @param id
      * @return
      */
+    @ApiOperation("代理商详情")
     @PostMapping("/one")
     public Result findOne(Integer id){
         Optional<Agent> op = agentRepository.findById(id);
@@ -70,10 +75,10 @@ public class AgentController {
 
 
     /**
-     * 代理商信息编辑
      * @param agent
      * @return
      */
+    @ApiOperation("代理商信息编辑")
     @PostMapping("/update")
     public Result updateAgent(Agent agent){
         if(agent.getId()==null){
@@ -89,12 +94,12 @@ public class AgentController {
 
 
     /**
-     * 代理商客户列表
      * @param id
      * @param pageIndex
      * @param pageSize
      * @return
      */
+    @ApiOperation("代理商客户列表")
     @PostMapping("/user/list")
     public Result agentUsers(@RequestParam(name = "id") Integer id,
                              @RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
@@ -112,10 +117,11 @@ public class AgentController {
     }
 
     /**
-     * 商户详情
+     *
      * @param id 商户id
      * @return
      */
+    @ApiOperation("商户详情")
     @PostMapping("/user/one")
     public Result angentUser(@RequestParam(name = "id") Integer id){
         Optional<User> op = userRepository.findById(id);
@@ -123,9 +129,10 @@ public class AgentController {
     }
 
     /**
-     * 用户创建的站点集合
+     *
      * @return
      */
+    @ApiOperation("用户创建的站点集合")
     @PostMapping("/user/sites")
     public Result userSites(@RequestParam(name = "id") Integer id,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "10") Integer pageSize){
         Site site=new Site();
@@ -136,12 +143,12 @@ public class AgentController {
     }
 
     /**
-     * 客户消费记录
      * @param id
      * @param pageIndex
      * @param pageSize
      * @return
      */
+    @ApiOperation("客户消费记录")
     @PostMapping("/pay/log/list")
     public Result payLog(@RequestParam(name = "id",required = false)Integer id
             ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
@@ -157,14 +164,16 @@ public class AgentController {
 
 
     /**
-     * 用户修改密码
+     *
      * @param account
      * @param oldpwd
      * @param newpwd
      * @return
      */
+    @ApiOperation("用户修改密码")
+    @ApiParam(name = "account",value = "账户id")
     @PostMapping("/change/password")
-    public Result changePassword(@RequestParam(name = "account")String account,@RequestParam(name = "oldpwd")String oldpwd,@RequestParam(name = "newpwd")String newpwd){
+    public Result changePassword(@ApiParam(name="account",value="代理商账户")String account,@ApiParam(name = "oldpwd",value = "旧密码")String oldpwd,@ApiParam(name = "newpwd",value = "新密码")String newpwd){
         Agent agent = agentRepository.findOneByAccount(account);
         boolean matches = passwordEncoder.matches(oldpwd, agent.getPassword());
         if(matches){

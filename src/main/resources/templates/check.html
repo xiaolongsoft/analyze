@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href=" /index.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="/index.js">
+       </script>
+</head>
+<body>
+    <div class="bwrap">
+        <input type="hidden" id="saleid" th:value="${saleid}">
+        <input type="hidden" id="tel" th:value="${tel}">
+        <div class="bg">
+            <header>
+                <img src=" /img/logo.png" alt="">
+                <span>北京飞天经纬科技股份有限公司 </span>
+            </header>
+            <div class="middle">
+                <div class="con">
+                    <p>移动设备成“首选屏幕”</p>
+                    <img class="bot" src=" /img/bot.png" alt="">
+                    <div style="margin-top: 20px;">
+                        <img class="com" src=" /img/com.png" alt="">
+                        <img class="phone" src=" /img/phone.png" alt="">
+
+                    </div>
+                    <p class="tc mt15 mt15 c270D69"><span class="red">移动化</span> 已经成为了一个不争的趋势</p>
+                    <ul>
+                        <li><span></span> 企业办公和宣传推广还依赖pc ？</li>
+                        <li><span></span> 审批和信息查询无法在移动端进行造成效率低下？</li>
+                    </ul>
+                    <p class="mt15">那就快来找我们进行<span class="red">快速+低成本</span>的改造吧</p>
+                </div>
+                <div class="con1">
+                    <div class="con1-t">
+                        <div>
+                            <img src=" /img/red.png" alt="">
+                            <img src=" /img/yellow.png" alt="">
+                            <span class="fff">查看您的网站移动化程度</span>
+                            <img src=" /img/red.png" alt="">
+                            <img src=" /img/yellow.png" alt="">
+                        </div>
+                    
+                    </div>
+                    <div class="con1-b">
+                        <p>在下面搜索框内输入您的网址，查看网址移动化程度</p>
+                        <div class="input-wrap">
+                            <input type="url">
+                            <span id="getfraction">
+                                <img src=" /img/search.png" alt="">
+                            </span>
+                        </div>
+                    </div>
+                
+                </div>
+                <button class="freeget">免费获取专业1对1咨询</button>
+            </div>
+        
+        </div>
+    </div>
+
+    <footer>
+        <button id="call_sale">
+            <img src=" /img/s-p.png" alt="">电话咨询
+        </button>
+        <button class="freeget">
+            <img src=" /img/turn.png" alt="">免费体验
+        </button>
+    </footer>
+    <div class="dialog-wrap"  style="display: none;">
+        <div class="dialog" >
+            <!-- 咨询 -->
+            <div id="freed" class="free" style="display: none;">
+                <p class="tc">免费获取专业1对1咨询</p>
+                <div style="padding:0 10px">
+                    <div class="free-title">姓名</div>
+                    <input id="textarea" type="text" placeholder="请输入您的姓名" >
+                    <div class="free-title">联系方式</div>
+                    <input id="phone" type="text" placeholder="请输入您的联系方式" >
+                </div>
+                <div class="tc">
+                    <button>提交</button>
+                </div>
+            </div>
+            <!-- 加载中 -->
+            <div id="yhloading" class="youhua" style="display: none;">
+                <div class="yh-title">
+                    <div>
+                        <img src=" /img/load.gif" alt="">
+                       <p class="load-text">正在检测中...</p>
+                    </div>
+                   
+                </div>
+            </div>
+            <!-- 60优化 -->
+           <div id="youhuad" class="youhua" style="display: none;">
+                <div class="yh-title">
+                    <div>
+                        <img src=" /img/60.png" alt="">
+                    </div>
+                   
+                </div>
+                <p class="yh-text">Page is mobile friendly</p>
+                <p class="yh-time">测试时间：2020.3.18   上午9:20</p>
+                <div class="tc">
+                    <button class="freeget">了解更多</button>
+                </div>
+           </div>
+           <!-- 0优化 -->
+           <div id="youhua1d" class="youhua youhua1" style="display: none;">
+                <div class="yh-title">
+                    <div>
+                        <img src=" /img/0.png" alt="">
+                    </div>
+                
+                </div>
+                <p class="yh-text red">Page is not mobile friendly</p>
+                <p class="yh-time">测试时间：2020.3.18   上午9:20</p>
+                <ul class="c333">
+                    <li><span></span> 移动化办公更方便</li>
+                    <li><span></span>只需一行代码，就能多端兼容</li>
+                    <li><span></span>更快的访问体验</li>
+                </ul>
+                <div class="tc">
+                    <button class="freeget">免费获得优化方案</button>
+                </div>
+        </div>
+
+        </div>
+    </div>
+</body>
+</html>

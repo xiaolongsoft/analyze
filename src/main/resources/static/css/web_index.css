@@ -1,0 +1,441 @@
+body {
+    margin: 0;
+}
+
+/* 头部标题 */
+
+.header {
+    width: 1920px;
+    height: 600px;
+    background-image: url(/imgweb/bg2.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+/* 头部标题-左边文字 */
+
+.h-left {
+    float: left;
+    width: 1152px;
+    height: 600px;
+}
+
+.h-left .title {
+    margin-top: 220px;
+    margin-left: 201px;
+    width: 649px;
+    height: 68px;
+    font-size: 70px;
+    font-family: Source Han Sans SC;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 1);
+}
+
+.h-left .desc {
+    margin-top: 51px;
+    margin-left: 200px;
+    width: 836px;
+    height: 30px;
+    font-size: 30px;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+}
+
+/* 头部标题-右侧图片 */
+
+.h-right {
+    float: left;
+    width: 760px;
+    height: 600px;
+}
+
+.h-right-img {
+    width: 550px;
+    height: 550px;
+    margin-top: 0px;
+    margin-left: 20px;
+}
+
+/* 搜索 */
+
+.search {
+    width: 1920px;
+    height: 234px;
+    background: rgb(186, 222, 251);
+    opacity: 0.7;
+}
+
+.search .title {
+    padding-top: 50px;
+    margin-left: 200px;
+    font-size: 26px;
+    font-family: Source Han Sans SC;
+    font-weight: 500;
+    color: rgba(37, 147, 225, 1);
+    line-height: 41px;
+}
+
+.search .inputbox {
+    margin-top: 30px;
+    margin-left: 200px;
+    width: 1520px;
+    height: 80px;
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(26, 83, 109, 1);
+    border-radius: 40px;
+}
+
+.inputbox .input {
+    float: left;
+    width: 1300px;
+    height: 78px;
+    line-height: 78px;
+    font-size: 26px;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(153, 153, 153, 1);
+    border: 0;
+    margin-left: 30px;
+}
+
+.inputbox .split {
+    float: left;
+    margin-top: 10px;
+    margin-left: 50px;
+    width: 2px;
+    height: 60px;
+    background: rgba(153, 153, 153, 1);
+}
+
+.inputbox .s {
+    float: left;
+    border: 1;
+    background-color: transparent;
+    background-image: url(/imgweb/search.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 36px;
+    height: 36px;
+    margin-top: 20px;
+    margin-left: 40px;
+}
+
+.ys {
+    width: 1920px;
+    height: 680;
+    background-image: url(/imgweb/ys.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.zc {
+    width: 1920px;
+    height: 638;
+    background-image: url(/imgweb/zc.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+/* 底部 */
+
+.foot {
+    width: 1920px;
+    height: 530px;
+    background: linear-gradient(120deg, rgba(1, 124, 225, 1), rgba(87, 179, 250, 1));
+}
+
+.foot-l {
+    float: left;
+    width: 1152px;
+    height: 530px;
+}
+
+.foot-r {
+    float: left;
+    width: 768px;
+    height: 530px;
+}
+
+.foot-name {
+    margin-top: 60px;
+    font-size: 34px;
+    font-family: Source Han Sans SC;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 1);
+}
+
+.foot-p {
+    margin-top: 60px;
+    font-size: 24px;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+}
+
+.foot-a {
+    margin-top: 20px;
+    font-size: 25px;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+}
+
+/* 表单 */
+
+.formbox {
+    padding-top: 30px;
+    margin-left: 200px;
+    width: 690px;
+    height: 450px;
+    /* background-color: yellow; */
+    font-size: 26px;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+}
+
+.line {
+    width: 690px;
+    height: 98px;
+    border-bottom: 1px solid rgb(255, 255, 255);
+}
+
+.line-name {
+    float: left;
+    width: 100px;
+    height: 30px;
+    font-size: 24px;
+    margin-top: 31px;
+    margin-left: 30px;
+}
+
+input:focus, button:focus, #textarea:focus {
+    outline-width: 0;
+}
+
+.line-input {
+    float: left;
+    width: 500px;
+    height: 30px;
+    margin-top: 34px;
+    border: 0;
+    background-color: transparent;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 1);
+}
+
+.line-input::placeholder {
+    font-size: 1em;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(221, 221, 221, 1);
+}
+
+.btnsub {
+    width: 690px;
+    height: 60px;
+    background: rgba(249, 213, 117, 1);
+    border: 2px solid rgba(211, 180, 98, 1);
+    border-radius: 10px;
+    font-size: 30px;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgb(194, 98, 32);
+    margin-top: 50px;
+}
+
+/* 省市选择器 */
+
+.select_content {
+    font-size: 20px;
+    border: 1px #CCCCCC solid;
+    width: 330px;
+    height: 150px;
+    overflow: auto;
+    overflow-x: hidden;
+    margin-top: 100px;
+    background: linear-gradient(120deg, rgba(1, 124, 225, 1), rgba(87, 179, 250, 1));
+}
+
+.select_content::-webkit-scrollbar {
+    width: 0;
+}
+
+.select_content span {
+    cursor: pointer;
+    display: block;
+    color: #788F72;
+    width: 100%;
+    line-height: 2em;
+    font-size: 1em;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(221, 221, 221, 1);
+    padding-left: 15px;
+}
+
+.select_content span:hover {
+    background: #59B1F8;
+    color: #000;
+}
+
+/* 弹窗背景 */
+
+.dialog-wrap {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(51, 51, 51, 0.9);
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* 弹窗 */
+
+.dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 15px;
+    transform: translate(-50%, -50%);
+    padding: 28px 10px;
+    transition: all .5s ease-in;
+    -webkit-transition: all .5s ease-in;
+    /* max-height: 320px; */
+    overflow: hidden;
+}
+
+/* 弹窗-等待中 */
+
+#yhloading .load-text {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+#yhloading .yh-title>div img {
+    width: 115px;
+    height: 65px;
+}
+
+.youhua {
+    text-align: center;
+}
+
+.yh-text {
+    margin-top: 70px;
+    font-size: 18px;
+    font-family: Source Han Sans SC;
+    font-weight: bold;
+    color: rgba(33, 114, 224, 1);
+}
+
+.yh-time {
+    font-size: 13px;
+    margin-top: 24px;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(153, 153, 153, 1);
+}
+
+.tc {
+    text-align: center;
+}
+
+.freeget {
+    margin-top: 50px;
+    width: 125px;
+    height: 30px;
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(33, 114, 224, 1);
+    border-radius: 15px;
+    font-size: 12px;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(33, 114, 224, 1);
+}
+
+.youhua .yh-title {
+    width: 175px;
+    height: 175px;
+    background: url('/imgweb/bluey.png')no-repeat;
+    background-size: 100%;
+    border-radius: 50%;
+    padding: 10px;
+    margin: 50 auto;
+}
+
+.youhua1 .yh-title {
+    background: url('/imgweb/redy.png') no-repeat;
+    background-size: 100%;
+}
+
+.youhua .yh-title>div {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 50%;
+    text-align: center;
+    padding-top: 43px;
+    box-sizing: border-box;
+}
+
+.youhua .yh-title>div img {
+    width: 48px;
+    height: 84px;
+}
+
+.youhua ul {
+    display: inline-block;
+    text-align: left;
+    padding-top: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.middle ul {
+    margin-top: 30px;
+}
+
+.middle ul>li, .youhua ul>li {
+    list-style: none;
+    font-size: 12px;
+    font-family: Source Han Sans SC;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.middle ul>li span, .youhua ul>li span {
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(169deg, rgba(149, 75, 211, 1), rgba(32, 68, 200, 1));
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+    vertical-align: unset;
+}
+
+.youhua1 ul>li span {
+    background: #E60012;
+}
+
+.youhua ul>li span {
+    width: 10px;
+    height: 10px;
+}
+
+.f50 {
+    width: 50%;
+    float: left;
+}
+
+.r50 {
+    width: 50%;
+    float: right;
+}
+.c333{color:#333}

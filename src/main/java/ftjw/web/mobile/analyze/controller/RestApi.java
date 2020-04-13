@@ -5,10 +5,18 @@ import cn.hutool.http.HttpUtil;
 import ftjw.web.mobile.analyze.core.Result;
 import ftjw.web.mobile.analyze.core.ResultGenerator;
 import ftjw.web.mobile.analyze.core.SeleniumAnalyze;
-import ftjw.web.mobile.analyze.dao.*;
-import ftjw.web.mobile.analyze.entity.*;
+import ftjw.web.mobile.analyze.dao.DataRepository;
+import ftjw.web.mobile.analyze.dao.SaleRepository;
+import ftjw.web.mobile.analyze.dao.SubmitRepository;
+import ftjw.web.mobile.analyze.dao.UrlRepository;
+import ftjw.web.mobile.analyze.entity.AnalyzeData;
+import ftjw.web.mobile.analyze.entity.AnalyzeSubmit;
+import ftjw.web.mobile.analyze.entity.SaleMan;
+import ftjw.web.mobile.analyze.entity.UrlAccessLog;
 import ftjw.web.mobile.analyze.security.IsAdmin;
-import ftjw.web.mobile.analyze.security.IsAgent;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -30,6 +38,7 @@ import java.util.stream.Collectors;
  * 2020/3/16 17:47
  */
 @RestController
+@Api(tags = "通用接口")
 @RequestMapping("/api")
 @Slf4j
 public class RestApi {
@@ -39,30 +48,9 @@ public class RestApi {
     @Resource
     private SubmitRepository submitRepository;
 
-    @Resource
-    private AgentRepository agentRepository;
-
     @Autowired
     PasswordEncoder passwordEncoder;
 
-//    @PostMapping("/login")
-//    public Result logiin(@RequestParam(name = "username")String username,@RequestParam(name = "password") String password){
-//        Agent account = agentRepository.findOneByAccount(username);
-//        if(account==null){
-//            return ResultGenerator.genFailResult("账号/密码错误。");
-//        }
-//        boolean matches = passwordEncoder.matches(password, account.getPassword());
-//        if(matches){
-//            Map map=new HashMap();
-//            map.put("username",username);
-//            map.put("token",passwordEncoder.encode(username));
-//            map.put("role",account.getRole());
-//            return ResultGenerator.genSuccessResult(map);
-//        }else {
-//            return ResultGenerator.genFailResult("账号/密码错误。");
-//        }
-//
-//    }
 
 
     @RequestMapping("")
@@ -73,9 +61,9 @@ public class RestApi {
         return token;
     }
 
-    @IsAgent
-    @RequestMapping("/p")
-    public String testPost(String name,Integer id){
+    @ApiOperation("测试方法")
+    @GetMapping("/p")
+    public String testPost(@ApiParam(name = "n",value = "文档参数注解")@RequestParam("n") String name, Integer id){
         return "name:"+name+" ,id:"+id;
     }
 
@@ -114,7 +102,7 @@ public class RestApi {
 
     @RequestMapping("/check")
     @ResponseBody
-    public Map analyzeUrl(@RequestParam(name = "url") String url,@RequestParam(name = "sid") Integer sid){
+    public Map analyzeUrl(@RequestParam(name = "url") String url,@RequestParam(name = "sid",required = false) Integer sid){
         url=URLUtil.normalize(url);
         Map map=new HashMap();
         SeleniumAnalyze seleniumAnalyze=new SeleniumAnalyze();

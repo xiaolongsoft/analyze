@@ -1,0 +1,160 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>宣传页</title>
+	<link rel="stylesheet" href="/css/web_index.css">
+	<script src="/js/jquery-3.4.1.js"></script>
+	<script src="/js/weib_index.js"></script>
+</head>
+
+<style>
+
+</style>
+
+<body>
+<div id="content">
+	<!-- 头部标题 -->
+	<div class="header">
+		<div class="h-left">
+			<div class="title">移动化适配火爆招商</div>
+			<div class="desc">携手移动化适配，共享千亿蓝海市场全国招募城市合作伙伴...</div>
+		</div>
+		<div class="h-right">
+			<img src="/imgweb/qiu.png" class="h-right-img">
+		</div>
+	</div>
+	<!-- 搜索 -->
+	<div class="search">
+		<div class="title">在下面搜索框内输入您的网址，查看网址移动化程度</div>
+		<div class="inputbox">
+			<input class="input" name="weburl" id="weburl" value="" placeholder="www.***.com" />
+			<div class="split"></div>
+			<!-- <div class="s">	</div> -->
+			<div class="s" id="search"></div>
+		</div>
+	</div>
+	<!-- 优势政策 -->
+	<div class="ys"></div>
+	<div class="zc"></div>
+	<!-- 底部 -->
+	<div class="foot">
+		<div class="foot-l">
+			<div class="formbox">
+
+				<div class="line">
+					<div class="line-name">
+						姓名 :
+					</div>
+					<input class="line-input" placeholder="请输入您的姓名" id="textarea" />
+				</div>
+
+				<div class="line">
+					<div class="line-name">
+						电话 :
+					</div>
+					<input class="line-input" placeholder="请输入您的电话" id="phone" type="number"
+						   oninput="if(value.length>5)value=value.slice(0,11)" />
+				</div>
+				<div style="width: 690px; height: 100px;">
+					<div class="line" style="width: 330px;float:left">
+						<input class="line-input" style="margin-left: 30px;width: 250px;" placeholder="请选择省份"
+							   onclick="hidep('province_input')" type="text" value="" id="province" readonly />
+						<div id="province_input" style="display:none " class="select_content"></div>
+					</div>
+					<div class="line" style="width: 330px;float:left;margin-left: 30px;">
+						<input class="line-input" style="margin-left: 30px;width: 250px;" placeholder="请选择城市"
+							   onclick="hidec('city_input')" type="text" value="" id="city" readonly />
+						<div id="city_input" style="display:none " class="select_content"></div>
+					</div>
+
+				</div>
+
+				<button class="btnsub" onclick="submit()">提交</button>
+			</div>
+		</div>
+		<div class="foot-r">
+			<div class="foot-name">北京飞天经纬科技股份有限公司</div>
+			<div class="foot-p">联系电话：40000-20000</div>
+			<div class="foot-a">公司地址：北京市朝阳区中国铁建广场C座27层</div>
+		</div>
+	</div>
+</div>
+<!-- 弹窗 -->
+<div class="dialog-wrap" style="display: none;">
+	<div class="dialog">
+		<!-- 加载中 -->
+		<div id="yhloading" class="youhua" style="display: none;">
+			<div class="yh-title">
+				<div style="background-color: #FCFBFB;">
+					<img src="/imgweb/load.gif" alt="">
+					<div class="load-text">正在检测中...</div>
+				</div>
+			</div>
+			<!-- <div class="btn">
+                <button class="color-btn">人工获取更专业报告</button>
+                <button class="kong-btn">重新检测</button>
+            </div> -->
+		</div>
+		<!-- 60优化 -->
+		<div id="youhuad" class="youhua" style="display: none;">
+			<div class="r50">
+				<div class="yh-title">
+					<div>
+						<img src="/imgweb/60.png" alt="">
+					</div>
+				</div>
+			</div>
+
+			<!-- <p class="yh-text">Page is mobile friendly</p> -->
+			<div class="r50">
+				<p class="yh-text">不错，网站可以继续优化</p>
+				<p class="yh-time">测试时间：2020.3.18 上午9:20</p>
+				<div class="tc">
+					<button class="freeget">了解更多</button>
+				</div>
+			</div>
+		</div>
+		<!-- 0优化 -->
+		<div id="youhua1d" class="youhua youhua1" style="display: none;">
+			<div class="r50">
+				<div class="yh-title">
+					<div>
+						<img src="/imgweb/0.png" alt="">
+					</div>
+				</div>
+			</div>
+
+			<!-- <p class="yh-text red">Page is not mobile friendly</p> -->
+			<div class="r50">
+				<p class="yh-time">测试时间：2020.3.18 上午9:20</p>
+				<p class="yh-text" style="margin-top: 40px;">移动端展示效果不佳</p>
+
+
+				<ul class="c333">
+					<li><span></span> 可点击元素之间的距离太近</li>
+					<li><span></span>文字太小，无法阅读</li>
+					<li><span></span>未设置视口值，布局有些乱</li>
+				</ul>
+
+				<div class="tc">
+					<button class="freeget">免费获得优化方案</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+</body>
+<script type="text/javascript">
+	window.onload = function () {
+		zoomElement()
+	}
+
+
+
+</script>
+
+</html>

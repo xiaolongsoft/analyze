@@ -2,11 +2,13 @@ package ftjw.web.mobile.analyze.controller;
 
 import ftjw.web.mobile.analyze.core.Result;
 import ftjw.web.mobile.analyze.core.ResultGenerator;
-import ftjw.web.mobile.analyze.utill.UpdateTool;
 import ftjw.web.mobile.analyze.dao.AgentPayLogRepository;
 import ftjw.web.mobile.analyze.dao.AgentRepository;
 import ftjw.web.mobile.analyze.entity.Agent;
 import ftjw.web.mobile.analyze.entity.AgentPayLog;
+import ftjw.web.mobile.analyze.utill.UpdateTool;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,7 @@ import java.util.Optional;
  * 殷晓龙
  * 2020/4/3 11:26
  */
+@Api(tags = "管理员控制器",produces = "管理员功能api")
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -34,9 +37,10 @@ public class AdminController {
     private AgentRepository agentRepository;
 
     /**
-     * 管理员直接创建代理商账号
+     *
      * @return
      */
+    @ApiOperation("管理员直接创建代理商账号")
     @PostMapping("/agent/create")
     public Result agentApply(@Valid Agent agent){
         try {
@@ -52,12 +56,13 @@ public class AdminController {
     }
 
     /**
-     * 代理商列表
+     *
      * @param keywords
      * @param pageIndex
      * @param pageSize
      * @return
      */
+    @ApiOperation("代理商列表")
     @PostMapping("/agent/list")
     public Result agentList(@RequestParam(name = "keywords",required = false) String keywords, @RequestParam(name = "status",defaultValue = "1") Integer status,
                             @RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
@@ -80,6 +85,7 @@ public class AdminController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @ApiOperation("管理员审核")
     @PostMapping("/agent/update")
     public Result updateAgent(@RequestParam(name = "id") Integer id,@RequestParam(name = "status") Integer status){
         if(id==null){
@@ -112,6 +118,7 @@ public class AdminController {
     @Resource
     AgentPayLogRepository agentPayLogRepository;
 
+    @ApiOperation("代理商资金流水记录")
     @PostMapping("/pay/log/list")
     public Result payLog(@RequestParam(name = "id",required = false)Integer id,@RequestParam(name = "action")String action
     ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
