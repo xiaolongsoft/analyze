@@ -87,6 +87,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- JWT 支持 -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.8.2</version>
+        </dependency>
+
         <!-- 安全框架 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -111,6 +119,18 @@
             <groupId>com.belerweb</groupId>
             <artifactId>pinyin4j</artifactId>
             <version>2.5.0</version>
+        </dependency>
+
+        <!--Swagger-UI API文档生产工具-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version> 2.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version> 2.7.0</version>
         </dependency>
     </dependencies>
 
