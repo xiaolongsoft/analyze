@@ -1,7 +1,13 @@
 package ftjw.web.mobile.analyze;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import ftjw.web.mobile.analyze.core.EmailSender;
 import ftjw.web.mobile.analyze.core.SeleniumAnalyze;
+import ftjw.web.mobile.analyze.entity.User;
+import ftjw.web.mobile.analyze.utill.YDZWUtill;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -85,5 +91,18 @@ public class AutoTest {
         Assert.assertTrue(matches);
     }
 
+    @Test
+    public  void createUser(){
+//        User user =new User();
+//        user.setName("晓龙测试");
+//        user.setLogin("xiaolong");
+//        user.setPassword("123456");
+//        user.setServiceid("1");
+//        user.setOrgname("晓龙测试testttttttt");
+//        Map<String, Object> map = BeanUtil.beanToMap(user,false,true);
+//        String user1 = YDZWUtill.createUser(map);
+        JSONObject jsonObject = JSONUtil.parseObj("{\"code\":0,\"orgid\":309}");
+        System.out.println(jsonObject.get("orgid"));
+    }
 
 }

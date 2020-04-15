@@ -1,5 +1,7 @@
 package ftjw.web.mobile.analyze.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,6 +21,7 @@ import java.util.Date;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "ydh_agent")
+@ApiModel("代理商实体类")
 public class Agent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -95,5 +98,11 @@ public class Agent {
      * 市
      */
     String city;
+
+    @ApiModelProperty(value = "省事等级,   1一线 ，11，新一线，2二线，3 三线及以下" )
+    Integer cityLevel;
+
+    @ApiModelProperty(value = "代理商等级, 1普通代理，2 金牌代理，3 核心代理")
+    Integer angetLevel;
 
 }

@@ -68,7 +68,6 @@ public class IBossUtill {
         String url=  QUERY_URL.replace("APPID",appid)
                     .replace("ACCESS_TOKEN",getAccessToken(param));
 
-
         return HttpUtil.get(url,param);
     }
 

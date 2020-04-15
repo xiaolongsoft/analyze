@@ -74,7 +74,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setHeader("Content-Type", "application/json;charset=UTF-8");
         if (authResult != null) {
             // 处理登入成功请求
-            User user = (User) authResult.getPrincipal();
+            AgentDetials user = (AgentDetials) authResult.getPrincipal();
             user.getUsername();
 
             String token = JwtUtil.sign(user.getUsername(), user.getPassword());
@@ -84,6 +84,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             map.put("username",user.getUsername());
             map.put("token","YDH:"+token);
             map.put("role",roles);
+            map.put("agentid",user.getAgentid());
             Result responseEntity = ResultGenerator.genSuccessResult(map);
             response.setStatus(HttpStatus.OK.value());
             response.getWriter().write(mapper.writeValueAsString(responseEntity));

@@ -1,11 +1,17 @@
 package ftjw.web.mobile.analyze.controller;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.github.pagehelper.util.StringUtil;
 import ftjw.web.mobile.analyze.core.Result;
 import ftjw.web.mobile.analyze.core.ResultGenerator;
 import ftjw.web.mobile.analyze.dao.*;
 import ftjw.web.mobile.analyze.entity.User;
 import ftjw.web.mobile.analyze.entity.*;
+import ftjw.web.mobile.analyze.security.AgentDetials;
 import ftjw.web.mobile.analyze.utill.UpdateTool;
+import ftjw.web.mobile.analyze.utill.YDZWUtill;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -14,6 +20,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +29,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -63,14 +73,13 @@ public class AgentController {
     }
 
     /**
-     * @param id
      * @return
      */
     @ApiOperation("代理商详情")
     @PostMapping("/one")
-    public Result findOne(Integer id){
-        Optional<Agent> op = agentRepository.findById(id);
-        return ResultGenerator.genSuccessResult(op.get());
+    public Result findOne(String username ){
+        Agent one = agentRepository.findOneByAccount(username);
+        return ResultGenerator.genSuccessResult(one);
     }
 
 
@@ -150,10 +159,13 @@ public class AgentController {
      */
     @ApiOperation("客户消费记录")
     @PostMapping("/pay/log/list")
-    public Result payLog(@RequestParam(name = "id",required = false)Integer id
+    public Result payLog(@RequestParam(name = "id",required = false)Integer id,@RequestParam(name = "action",required = false)String action
             ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
         UserPayLog upl=new UserPayLog();
         upl.setUserId(id);
+        if(StringUtil.isNotEmpty(action)){
+            upl.setAction(action);
+        }
         PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
         Page<UserPayLog> page = userPayLogRepository.findAll(Example.of(upl), request);
         return  ResultGenerator.genSuccessResult(page);
@@ -170,7 +182,7 @@ public class AgentController {
      * @param newpwd
      * @return
      */
-    @ApiOperation("用户修改密码")
+    @ApiOperation("代理商修改密码")
     @ApiParam(name = "account",value = "账户id")
     @PostMapping("/change/password")
     public Result changePassword(@ApiParam(name="account",value="代理商账户")String account,@ApiParam(name = "oldpwd",value = "旧密码")String oldpwd,@ApiParam(name = "newpwd",value = "新密码")String newpwd){
@@ -183,5 +195,35 @@ public class AgentController {
             return ResultGenerator.genFailResult("原始账号/密码不正确。");
         }
         return ResultGenerator.genSuccessResult("修改成功");
+    }
+
+    @ApiOperation("代理商创建用户账号")
+    @PostMapping("/user/create")
+    public Result createUser(@Valid User user){
+        Map<String, Object> map = BeanUtil.beanToMap(user,false,true);
+        String josn = YDZWUtill.createUser(map);
+        JSONObject result = JSONUtil.parseObj(josn);
+
+        AgentDetials agentDetials = getCurrentUserDetials();
+
+        if(result.getInt("code")==0){
+            AgentUser au=new AgentUser();
+            au.setStatus(1);
+            au.setUserId(result.getInt("orgid"));
+            au.setAgentId(agentDetials.getAgentid());
+            agentUserRepository.save(au);
+            return ResultGenerator.genSuccessResult("用户创建成功.");
+        }else {
+            return ResultGenerator.genFailResult(result.getStr("message"));
+        }
+
+    }
+
+    /**
+     * 获取当前登录用户
+     */
+    private AgentDetials getCurrentUserDetials() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (AgentDetials) authentication.getPrincipal();
     }
 }

@@ -2,6 +2,7 @@ package ftjw.web.mobile.analyze.security;
 
 import ftjw.web.mobile.analyze.dao.AgentRepository;
 import ftjw.web.mobile.analyze.entity.Agent;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -33,6 +34,12 @@ public class AgentUserDetailService implements UserDetailsService {
         for (String role:agent.getRole().split(",")){
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+role));
         }
-        return new User(loginName,agent.getPassword(),grantedAuthorities);
+        AgentDetials agentDetials = new AgentDetials(loginName, agent.getPassword(), grantedAuthorities);
+        agentDetials.setAgentid(agent.getId());
+        agentDetials.setDesc(agent.getName());
+        return agentDetials;
     }
+
+
 }
+

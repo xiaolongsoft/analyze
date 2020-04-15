@@ -1,5 +1,6 @@
 package ftjw.web.mobile.analyze.controller;
 
+import com.github.pagehelper.util.StringUtil;
 import ftjw.web.mobile.analyze.core.Result;
 import ftjw.web.mobile.analyze.core.ResultGenerator;
 import ftjw.web.mobile.analyze.dao.AgentPayLogRepository;
@@ -120,13 +121,59 @@ public class AdminController {
 
     @ApiOperation("代理商资金流水记录")
     @PostMapping("/pay/log/list")
-    public Result payLog(@RequestParam(name = "id",required = false)Integer id,@RequestParam(name = "action")String action
+    public Result payLog(@RequestParam(name = "id",required = false)Integer id,@RequestParam(name = "action",required = false)String action
     ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
         AgentPayLog apl=new AgentPayLog();
         apl.setAgentId(id);
-        apl.setAction(action);
+        if(StringUtil.isNotEmpty(action)){
+            apl.setAction(action);
+        }
         PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
         Page<AgentPayLog> page = agentPayLogRepository.findAll(Example.of(apl), request);
         return  ResultGenerator.genSuccessResult(page);
     }
+
+
+    /**
+     * 添加记录
+     *
+     * @param agentId
+     * @param action
+     * @return
+     */
+    @PostMapping("/agentPayLog/create")
+    public Result createAgentPayLog(@RequestParam("agentId") Integer agentId, @RequestParam("action") Integer action,@RequestParam("money") Double money) {
+        if (agentId == null) {
+            return ResultGenerator.genEmptyResult("id不能为空");
+        }
+        AgentPayLog agentPayLog = new AgentPayLog();
+        if (action == 1) {
+            //充值
+            Integer integer = agentRepository.updateById(agentId, money);
+            if(integer>0){
+                System.out.println("充值成功！");
+            }else{
+                return ResultGenerator.genFailResult("充值失败");
+            }
+            agentPayLog.setAction("充值");
+        } else if(action==0){
+            //消费——考虑余额够不够
+            Integer integer = agentRepository.updateById(agentId, -money);
+            if(integer>0){
+                System.out.println("消费成功！");
+            }else{
+                return  ResultGenerator.genFailResult("消费失败，余额不足");
+            }
+            agentPayLog.setAction("消费");
+        }else{
+            return ResultGenerator.genFailResult("状态不对！");
+        }
+        agentPayLog.setMoney(money);
+        agentPayLog.setAgentId(agentId);
+        agentPayLog.setCtime(new Date());
+        AgentPayLog save = agentPayLogRepository.save(agentPayLog);
+        return ResultGenerator.genSuccessResult(save);
+    }
+
+
 }

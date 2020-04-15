@@ -19,32 +19,32 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * 殷晓龙
  * 2020/3/25 16:42
  */
-//@Configuration
-//@EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .anyRequest().permitAll()
-                .and()
-                .httpBasic();
-        http.csrf().disable();
-
-//        http.cors().configurationSource(CorsConfigurationSource()).and()
-//                // security 默认 csrf 是开启的，我们使用了 token ，这个也没有什么必要了
-//                .csrf().disable()
+//        http
 //                .authorizeRequests()
-//                // 默认所有请求通过，但是我们要在需要权限的方法加上安全注解，这样比写死配置灵活很多
-//                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .antMatchers("/agent/**").hasAnyRole("ADMIN,AGENT")
 //                .anyRequest().permitAll()
 //                .and()
-//                // 添加自己编写的两个过滤器
-//                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-//                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailService))
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+//                .httpBasic();
+//        http.csrf().disable();
+
+        http.cors().configurationSource(CorsConfigurationSource()).and()
+                // security 默认 csrf 是开启的，我们使用了 token ，这个也没有什么必要了
+                .csrf().disable()
+                .authorizeRequests()
+                // 默认所有请求通过，但是我们要在需要权限的方法加上安全注解，这样比写死配置灵活很多
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/agent/**").hasAnyRole("ADMIN,AGENT")
+                .anyRequest().permitAll()
+                .and()
+                // 添加自己编写的两个过滤器
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailService))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
 
     }
     @Autowired
