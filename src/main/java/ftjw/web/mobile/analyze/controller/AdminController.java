@@ -1,6 +1,5 @@
 package ftjw.web.mobile.analyze.controller;
 
-import com.github.pagehelper.util.StringUtil;
 import ftjw.web.mobile.analyze.core.Result;
 import ftjw.web.mobile.analyze.core.ResultGenerator;
 import ftjw.web.mobile.analyze.dao.AgentPayLogRepository;
@@ -119,19 +118,7 @@ public class AdminController {
     @Resource
     AgentPayLogRepository agentPayLogRepository;
 
-    @ApiOperation("代理商资金流水记录")
-    @PostMapping("/pay/log/list")
-    public Result payLog(@RequestParam(name = "id",required = false)Integer id,@RequestParam(name = "action",required = false)String action
-    ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
-        AgentPayLog apl=new AgentPayLog();
-        apl.setAgentId(id);
-        if(StringUtil.isNotEmpty(action)){
-            apl.setAction(action);
-        }
-        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
-        Page<AgentPayLog> page = agentPayLogRepository.findAll(Example.of(apl), request);
-        return  ResultGenerator.genSuccessResult(page);
-    }
+
 
 
     /**

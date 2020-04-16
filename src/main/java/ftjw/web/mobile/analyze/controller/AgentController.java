@@ -10,16 +10,14 @@ import ftjw.web.mobile.analyze.dao.*;
 import ftjw.web.mobile.analyze.entity.User;
 import ftjw.web.mobile.analyze.entity.*;
 import ftjw.web.mobile.analyze.security.AgentDetials;
+import ftjw.web.mobile.analyze.service.AgentService;
 import ftjw.web.mobile.analyze.utill.UpdateTool;
 import ftjw.web.mobile.analyze.utill.YDZWUtill;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,8 +53,12 @@ public class AgentController {
 
     @Resource
     SiteRepository siteRepository;
+
     @Resource
-    UserPayLogRepository userPayLogRepository;
+    private AgentService agentService;
+
+    @Resource
+    AgentPayLogRepository agentPayLogRepository;
 
 
     @ApiOperation("代理商申请")
@@ -122,7 +124,9 @@ public class AgentController {
         Page<AgentUser> all = agentUserRepository.findAll(Example.of(agent), request);
        List<Integer> ids= all.toList().stream().map(AgentUser::getUserId).collect(Collectors.toList());
         List<User> userList = userRepository.findAllById(ids);
-        return ResultGenerator.genSuccessResult(userList);
+        PageImpl pi=new PageImpl(userList,request,all.getTotalElements());
+
+        return ResultGenerator.genSuccessResult(pi);
     }
 
     /**
@@ -151,28 +155,45 @@ public class AgentController {
         return  ResultGenerator.genSuccessResult(sitePage);
     }
 
-    /**
-     * @param id
-     * @param pageIndex
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation("客户消费记录")
-    @PostMapping("/pay/log/list")
-    public Result payLog(@RequestParam(name = "id",required = false)Integer id,@RequestParam(name = "action",required = false)String action
-            ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
-        UserPayLog upl=new UserPayLog();
-        upl.setUserId(id);
-        if(StringUtil.isNotEmpty(action)){
-            upl.setAction(action);
-        }
-        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
-        Page<UserPayLog> page = userPayLogRepository.findAll(Example.of(upl), request);
-        return  ResultGenerator.genSuccessResult(page);
-    }
+//    /**
+//     * @param id
+//     * @param pageIndex
+//     * @param pageSize
+//     * @return
+//     */
+//    @ApiOperation("客户消费记录")
+//    @PostMapping("/pay/log/list")
+//    public Result payLog(@RequestParam(name = "id",required = false)Integer id,@RequestParam(name = "action",required = false)String action
+//            ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
+//        UserPayLog upl=new UserPayLog();
+//        upl.setUserId(id);
+//        if(StringUtil.isNotEmpty(action)){
+//            upl.setAction(action);
+//        }
+//        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
+//        Page<UserPayLog> page = userPayLogRepository.findAll(Example.of(upl), request);
+//        return  ResultGenerator.genSuccessResult(page);
+//    }
 
       @Autowired
       PasswordEncoder passwordEncoder;
+
+
+
+    @ApiOperation("代理商资金流水记录")
+    @PostMapping("/pay/log/list")
+    public Result payLog(@RequestParam(name = "id",required = false)Integer id,@RequestParam(name = "action",required = false)String action
+            ,@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam (defaultValue = "20") Integer pageSize){
+        AgentPayLog apl=new AgentPayLog();
+        apl.setAgentId(id);
+        if(StringUtil.isNotEmpty(action)){
+            apl.setAction(action);
+        }
+        PageRequest request= PageRequest.of(pageIndex-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
+        Page<AgentPayLog> page = agentPayLogRepository.findAll(Example.of(apl), request);
+        return  ResultGenerator.genSuccessResult(page);
+    }
+
 
 
     /**
@@ -212,6 +233,8 @@ public class AgentController {
             au.setUserId(result.getInt("orgid"));
             au.setAgentId(agentDetials.getAgentid());
             agentUserRepository.save(au);
+            //扣除一个商户创建用户的平台费用
+            agentService.deductionFee(agentDetials.getAgentid());
             return ResultGenerator.genSuccessResult("用户创建成功.");
         }else {
             return ResultGenerator.genFailResult(result.getStr("message"));

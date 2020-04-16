@@ -1,26 +1,19 @@
 package ftjw.web.mobile.analyze;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import ftjw.web.mobile.analyze.core.EmailSender;
 import ftjw.web.mobile.analyze.core.SeleniumAnalyze;
-import ftjw.web.mobile.analyze.entity.User;
-import ftjw.web.mobile.analyze.utill.YDZWUtill;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.ErrorHandler;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.thymeleaf.util.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -103,6 +96,13 @@ public class AutoTest {
 //        String user1 = YDZWUtill.createUser(map);
         JSONObject jsonObject = JSONUtil.parseObj("{\"code\":0,\"orgid\":309}");
         System.out.println(jsonObject.get("orgid"));
+    }
+    @Test
+    public  void PageNew(){
+        List<String> ls=new ArrayList<>();
+        PageImpl pi=new PageImpl(ls, Pageable.unpaged(),10);
+        System.out.println(pi);
+
     }
 
 }

@@ -104,5 +104,9 @@ public class Agent {
 
     @ApiModelProperty(value = "代理商等级, 1普通代理，2 金牌代理，3 核心代理")
     Integer angetLevel;
+    /**
+     * 产品ID
+     */
+    Integer productId;
 
 }
