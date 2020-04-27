@@ -21,10 +21,10 @@ public class Product {
     Integer id;
     @ApiModelProperty(value = "套餐名称")
     String proName;
-    @ApiModelProperty(value = "1平台 2一次性")
-    Integer type;
     @ApiModelProperty(value = "1普通代理2金牌代理3核心代理")
     Integer agentGrade;
     @ApiModelProperty(value = "代理价格")
-    String agentPrice;
+    Integer agentPrice;
+    @ApiModelProperty(value = "制作价格")
+    Integer makePrice;
 }

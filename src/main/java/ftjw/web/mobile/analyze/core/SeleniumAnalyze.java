@@ -19,14 +19,20 @@ import java.util.concurrent.TimeUnit;
  */
 public class SeleniumAnalyze {
 
-    public SeleniumAnalyze() {
+    private SeleniumAnalyze() {
         this.webDriver = initChromeDriver();
+    }
+
+    private static SeleniumAnalyze instance=new SeleniumAnalyze();
+
+    public static SeleniumAnalyze getInstance(){
+        return instance;
     }
 
     ChromeDriver webDriver;
 
 
-    //static String chromeDriverPath= "E:/python_home/venv/Scripts/chromedriver.exe";
+    //static final String chromeDriverPath= "E:/python_home/venv/Scripts/chromedriver.exe";
     static String chromeDriverPath= "/usr/bin/chromedriver";
     /**
      * 初始化webdriver

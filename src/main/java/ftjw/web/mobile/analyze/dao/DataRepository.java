@@ -1,10 +1,8 @@
 package ftjw.web.mobile.analyze.dao;
 
 import ftjw.web.mobile.analyze.entity.AnalyzeData;
-import org.apache.ibatis.annotations.ResultType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

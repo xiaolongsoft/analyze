@@ -56,7 +56,7 @@ public class AutoTest {
     }
 
     public void seletest(){
-        SeleniumAnalyze seleniumAnalyze=new SeleniumAnalyze();
+        SeleniumAnalyze seleniumAnalyze=SeleniumAnalyze.getInstance();
         try {
             System.out.println(seleniumAnalyze.webUrlCheck("http://aassssaw.com/"));
         } catch (Exception e) {
@@ -103,6 +103,13 @@ public class AutoTest {
         PageImpl pi=new PageImpl(ls, Pageable.unpaged(),10);
         System.out.println(pi);
 
+    }
+
+    @Test
+    public void singleton(){
+        SeleniumAnalyze instance = SeleniumAnalyze.getInstance();
+
+        System.out.println(instance);
     }
 
 }

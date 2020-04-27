@@ -1,5 +1,6 @@
 package ftjw.web.mobile.analyze.core;
 
+import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -8,6 +9,7 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
@@ -31,7 +33,8 @@ public class Swagger2Config {
 
         ParameterBuilder ticketPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
-        ticketPar.name("Authorization").description("user token")
+        ticketPar.name("globle_prarm").description("全局头部参数")
+                .defaultValue("big")
                 .modelRef(new ModelRef("string")).parameterType("header")
                 .required(false).build();
         //header中的ticket参数非必填，传空也可以
@@ -46,6 +49,7 @@ public class Swagger2Config {
                 .apis(RequestHandlerSelectors.basePackage("ftjw.web.mobile.analyze.controller"))
                 .paths(PathSelectors.any())
                 .build()
+                .securitySchemes(Lists.newArrayList(new ApiKey("apiKey","Authorization","header")))
                 ;
 
     }

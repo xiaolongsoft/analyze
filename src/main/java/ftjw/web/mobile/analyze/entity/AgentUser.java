@@ -3,6 +3,7 @@ package ftjw.web.mobile.analyze.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 殷晓龙
@@ -18,4 +19,6 @@ public class AgentUser {
     Integer agentId;
     Integer userId;
     Integer status;
+    Date ctime;
+    Date expireTime;
 }

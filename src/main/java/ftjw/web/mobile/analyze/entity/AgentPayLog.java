@@ -24,4 +24,6 @@ public class AgentPayLog {
     String action;
     Double money;
     Date ctime;
+    Integer payType;
+    Integer payChannel;
 }

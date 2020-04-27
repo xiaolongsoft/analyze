@@ -105,7 +105,7 @@ public class RestApi {
     public Map analyzeUrl(@RequestParam(name = "url") String url,@RequestParam(name = "sid",required = false) Integer sid){
         url=URLUtil.normalize(url);
         Map map=new HashMap();
-        SeleniumAnalyze seleniumAnalyze=new SeleniumAnalyze();
+        SeleniumAnalyze seleniumAnalyze=SeleniumAnalyze.getInstance();
         boolean flag;
         try {
             flag = seleniumAnalyze.webUrlCheck(url);

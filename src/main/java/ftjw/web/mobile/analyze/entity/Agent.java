@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 殷晓龙
@@ -25,6 +26,7 @@ import java.util.Date;
 public class Agent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name = "agentId")
     Integer id;
     /**
      * 代理商账号
@@ -81,6 +83,10 @@ public class Agent {
     @Size(min = 7,max = 11,message = "手机号格式不正确")
     String phone;
     /**
+     * 邮箱
+     */
+    String mailbox;
+    /**
      * 微信
      */
     String weixin;
@@ -108,5 +114,10 @@ public class Agent {
      * 产品ID
      */
     Integer productId;
+
+    @Transient
+    @JoinColumn(name = "orderList")
+    @OneToMany
+    List<YdhOrder>  orderList;
 
 }

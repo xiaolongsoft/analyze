@@ -1,25 +1,17 @@
 package ftjw.web.mobile.analyze;
 
-import com.github.pagehelper.util.StringUtil;
-import com.google.common.collect.Lists;
 import ftjw.web.mobile.analyze.core.EmailSender;
 import ftjw.web.mobile.analyze.core.SeleniumAnalyze;
 import ftjw.web.mobile.analyze.dao.AgentInfoRepository;
 import ftjw.web.mobile.analyze.dao.DataRepository;
 import ftjw.web.mobile.analyze.dao.SiteRepository;
-import ftjw.web.mobile.analyze.entity.AgentInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-import javax.mail.MessagingException;
-import java.util.List;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)

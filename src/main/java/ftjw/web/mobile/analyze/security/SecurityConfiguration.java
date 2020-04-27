@@ -42,6 +42,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 // 添加自己编写的两个过滤器
+                .headers().frameOptions().sameOrigin()
+                .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailService))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
